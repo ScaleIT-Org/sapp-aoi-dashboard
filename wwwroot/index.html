@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>	
-	<title>SICK AOI Data Auftrag 6</title>
+	<title>SICK AOI Data Systems</title>
 	
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />	
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,33 +16,21 @@
 <!-- Hide Safari User Interface Components -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 
+<script src="/js/jquery.min.js" type="text/javascript"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-	
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="/js/highcharts.js" type="text/javascript"></script>
+<script src="/js/highcharts.data.js" type="text/javascript"></script>
+<script src="/js/highcarts.exporting.js" type="text/javascript"></script>
+<script src="/js/highcarts.boost.js" type="text/javascript"></script>
 
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/js/bootstrap-select.min.js" type="text/javascript"></script>
 
-<script   src="https://code.jquery.com/jquery-1.12.3.js"   integrity="sha256-1XMpEtA4eKXNNpXcJ1pmMPs8JV+nwLdEqwiJeCQEkyc="   crossorigin="anonymous"></script>
-	
-<script src="http://code.highcharts.com/highcharts.js" type="text/javascript"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="js/boost.js"></script>
+<script src="/js/eventsource.js" type="text/javascript"></script>
+<script src="/js/task.js" type="text/javascript"></script>
 
-<script src="js/eventsource.js"></script>
-<script src="js/task.js"></script>
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-
-
-<script>
-  
-	
-</script>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-select.min.css">
 
 <script>//Globale Variablen
 	var ajaxUrl = "http://localhost:3000/Get";
@@ -283,7 +271,9 @@ $(window).bind('load', function(){
 function dropdownIntelligence() {
 	if (init === true) {
 		//Default configuration
-		$('#Boards').selectpicker('selectAll');
+        // $('#Boards').selectpicker('deselectAll');
+        $('#Boards').selectpicker('val', '3827582');
+		// $('#Boards').selectpicker('selectAll');
 		$('#Components').selectpicker('selectAll');
 		init = false;
 	}
@@ -417,13 +407,13 @@ dropdownIntelligence();
 		
 		<div class="tab-content">
 			<div id="visualization" class="tab-pane fade in active">	
-				<fieldset>
-					<legend>WebApp</legend>
+				<fieldset id="core-dashboard">
+					<legend>SICK AOI Data System</legend>
 					<div class="form-group">
-						<select class="selectpicker" id="Boards" multiple data-live-search="true" title="BoardsUnderTest">
+						<select class="selectpicker" data-width="auto" id="Boards" multiple data-live-search="true" title="BoardsUnderTest">
 						</select>
 
-						<select class="selectpicker" id="Components" multiple data-live-search="true" title="ComponentsUnderTest">
+						<select class="selectpicker" data-width="fit" id="Components" multiple data-live-search="true" title="ComponentsUnderTest">
 						  <optgroup id="C" label="Components">
 						  <option value="C"> Components</option>
 						  </optgroup>
@@ -455,7 +445,12 @@ dropdownIntelligence();
 				<button id="SaveConfig" type="button" class="btn btn-default"><b>Speichern</b></button>
 			</div>
 		</div>
-		
-
 	</body>	
+    <script type="text/javascript">
+        var frameable = true;
+        if(frameable){
+            $('fieldset:not(#core-dashboard)').hide();
+            $('.nav').hide();
+        }
+    </script>
 </html>
