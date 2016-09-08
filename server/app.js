@@ -22,8 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+// dir names are relative to this file 
+app.use(require('stylus').middleware(path.join(__dirname, '../wwwroot')));
+app.use(express.static(path.join(__dirname, '../wwwroot')));
+console.log(__dirname);
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
  
@@ -36,7 +38,9 @@ app.get('/', routes.index);
 
 //Read JSONLD file
 var fs = require('fs');
-var jsonld = JSON.parse(fs.readFileSync('data/aoiTestStep201677183729977.json', 'utf8'));
+var testJsonPath = path.join(__dirname,'../data/aoiTestStep201677183729977.json');
+
+var jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
 
 
 /*http.createServer(function (request, response) {
@@ -101,7 +105,7 @@ app.get('/Get', function (req, res) {
 
 app.get('/sse', function (req, res) {
   var parsedURL = url.parse(req.url, true);
-  var pathname = parsedURL.pathname + "/public";
+  var pathname = parsedURL.pathname + "/data";
 
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
@@ -120,7 +124,7 @@ app.get('/sse', function (req, res) {
     var c = i + 100;
     var f = function () {
       if (++i < c) {
-    jsonld = JSON.parse(fs.readFileSync('aoiTestStep201677183729977.json', 'utf8'));
+    jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
         res.write("id: " + i + "\n");
         res.write("data: " + JSON.stringify(jsonld) + "\n\n");
         timeoutId = setTimeout(f, 5000);
