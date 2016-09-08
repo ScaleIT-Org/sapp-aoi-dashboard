@@ -1,0 +1,20 @@
+{
+  "name": "evaulation_framework",
+  "version": "0.0.0",
+  "description": "evaulation_framework",
+  "main": "app.js",
+  "author": {
+    "name": "Kuhno92",
+    "email": ""
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "ejs": "^2.5.1",
+    "express": "3.2.4",
+    "sse": "0.0.6",
+    "stylus": "*"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}

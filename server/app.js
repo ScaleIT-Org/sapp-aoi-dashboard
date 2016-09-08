@@ -136,3 +136,5 @@ app.get('/sse', function (req, res) {
     });
 
 });
+
+module.exports = app;
