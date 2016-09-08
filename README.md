@@ -12,7 +12,7 @@ Upstream set to XXX
 
 ## Branching model
 
-Standalone branch = a branch that can be pulled as a submodule in order to serve the visualization app from another app
+Standalone branch = a branch that can be pulled as a submodule in order to serve the visualization app from another app, i.e. without server components
 
 ```
 
