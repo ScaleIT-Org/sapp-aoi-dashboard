@@ -196,15 +196,38 @@ $(window).bind('load', function(){
                 enabled: true,
                 text: 'X-Axis'
             },
-            //min:0,
+            minRange:285,
+            min:-100,
         	//max:150,
             //center Axsis
+            plotBands: [{
+                from: 25,
+                to: 100,
+                color: '#AED581',
+                borderColor: 'red',
+                label:{text:'Toleranz X',  verticalAlign: 'bottom'}
+            },
+            {
+                from: 125,
+                to: 160,
+                color: '#e57373',
+                borderColor: 'red',
+                label:{text:'Kritisch X',  verticalAlign: 'bottom'}
+            }],
             plotLines: [{
 			    color: 'black', // Color value
 			    dashStyle: 'Solid', // Style of the plot line. Default to solid
 			    value: 0, // Value of where the line will appear
 			    width: 2 // Width of the line    
-			  }],
+			  },
+              {
+                color: 'red', // Color value
+                dashStyle: 'longdash', // Style of the plot line. Default to solid
+                value: 180, // Value of where the line will appear
+                //should be 180 according to spec
+                width: 2, // Width of the line   
+                label:{text:'Toleranz X'}
+              }],
             startOnTick: true,
             endOnTick: true,
             showLastLabel: true
@@ -213,6 +236,7 @@ $(window).bind('load', function(){
             title: {
                 text: 'Y-Axis'
             },
+            // minRange:185,
             //min:0,
         	//max:150,
             //center Axsis
@@ -221,7 +245,15 @@ $(window).bind('load', function(){
 			    dashStyle: 'Solid', // Style of the plot line. Default to solid
 			    value: 0, // Value of where the line will appear
 			    width: 2 // Width of the line    
-			  }],
+			  },
+              {
+                color: 'red', // Color value
+                dashStyle: 'longdash', // Style of the plot line. Default to solid
+                value: 140, // Value of where the line will appear
+                //should be 140 according to spec
+                width: 2, // Width of the line  
+                label:{text:'Toleranz Y'} 
+              }],
         },
         legend: {
             layout: 'vertical',
@@ -271,10 +303,11 @@ $(window).bind('load', function(){
 function dropdownIntelligence() {
 	if (init === true) {
 		//Default configuration
-        // $('#Boards').selectpicker('deselectAll');
+        $('#Boards').selectpicker('deselectAll');
         $('#Boards').selectpicker('val', '3827582');
 		// $('#Boards').selectpicker('selectAll');
-		$('#Components').selectpicker('selectAll');
+        $('#Boards').selectpicker('val', 'Integrated Circuits');
+		// $('#Components').selectpicker('selectAll');
 		init = false;
 	}
 	
