@@ -15,7 +15,7 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../wwwroot'));
 app.set('view engine', 'ejs');
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -23,7 +23,7 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../wwwroot/public')));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
  
@@ -36,7 +36,7 @@ app.get('/', routes.index);
 
 //Read JSONLD file
 var fs = require('fs');
-var jsonld = JSON.parse(fs.readFileSync('data/aoiTestStep201677183729977.json', 'utf8'));
+var jsonld = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/aoiTestStep201677183729977.json'), 'utf8'));
 
 
 /*http.createServer(function (request, response) {
@@ -120,7 +120,7 @@ app.get('/sse', function (req, res) {
     var c = i + 100;
     var f = function () {
       if (++i < c) {
-    jsonld = JSON.parse(fs.readFileSync('aoiTestStep201677183729977.json', 'utf8'));
+    jsonld = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/aoiTestStep201677183729977.json'), 'utf8'));
         res.write("id: " + i + "\n");
         res.write("data: " + JSON.stringify(jsonld) + "\n\n");
         timeoutId = setTimeout(f, 5000);

@@ -29,8 +29,8 @@
 <script src="https://code.highcharts.com/modules/data.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-<script src="./boost.js"></script>
-<script src="eventsource.js"></script>
+<script src="js/boost.js"></script>
+<script src="js/eventsource.js"></script>
 <script src="js/task.js"></script>
 
 <!-- Latest compiled and minified CSS -->
@@ -351,7 +351,7 @@ function updateChartData() {
 	if (typeof(Worker) !== "undefined") {
 		// Check if Web worker already exists!
     	if (typeof(w) == "undefined") {
-			w = new Worker("./task.js");
+			w = new Worker("js/task.js");
 			
 	
 			mySeries = []
@@ -384,18 +384,18 @@ function updateChartData() {
 
 	w.addEventListener('message', function(e) {
 		var answer = e.data
+
 		for (b in answer) {
 			var series = chart.get(b);
 			var selected = $('#Components').val();
+
+		
+			(selected !== null && selected.length == 2)? series.setData(answer[b][0]) : null;
+			(selected !== null && selected.length == 1 && selected[0] == "C")? series.setData(answer[b][1]) : null ;
+			(selected !== null && selected.length == 1 && selected[0] == "IC")? series.setData(answer[b][2]) :  null;
+			(selected == null)? series.setData([]) : null;
+			mySeries.push(answer[b][0]);
 		}
-		
-		(selected !== null && selected.length == 2)? series.setData(answer[b][0]) : null;
-		(selected !== null && selected.length == 1 && selected[0] == "C")? series.setData(answer[b][1]) : null ;
-		(selected !== null && selected.length == 1 && selected[0] == "IC")? series.setData(answer[b][2]) :  null;
-		(selected == null)? series.setData([]) : null;
-		
-		mySeries.push(answer[b][0]);
-		
 		stopWorker();
 	}, false);	
 			
