@@ -32,17 +32,36 @@
 <script src="js/boost.js"></script>
 <script src="js/eventsource.js"></script>
 <script src="js/task.js"></script>
+<script src="js/marked.js"></script>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
-
 <script>
-  
-	
+	$(document).ready(function () {
+  		// get markdown content  
+        var body_location = 'markdown.md';
+                
+        function getText(myUrl){
+            var result = null;
+            $.ajax( { url: myUrl, 
+                      type: 'get', 
+                      dataType: 'html',
+                      async: false,
+                      success: function(data) { result = data; } 
+                    }
+            );
+            FileReady = true;
+            return result;
+        }
+        var markdown_source = getText(body_location);
+        document.getElementById("mdhtml").innerHTML = marked(markdown_source);
+    });
+
 </script>
+
 
 <script>//Globale Variablen
 	var ajaxUrl = "http://localhost:3000/Get";
@@ -413,6 +432,8 @@ dropdownIntelligence();
 		<ul class="nav nav-pills nav-justified">
 		  <li class="active"><a data-toggle="tab" href="#visualization">Visualization</a></li>
 		  <li><a data-toggle="tab" href="#config">Configuration</a></li>
+		  <li><a data-toggle="tab" href="#docu">Documentation</a></li>
+		  <li><a data-toggle="tab" href="#mon">Monitoring</a></li>
 		</ul>
 		
 		<div class="tab-content">
@@ -453,6 +474,16 @@ dropdownIntelligence();
 				  <input type="text" class="form-control" id="ajaxconfig" value="http://localhost:3000/Get" >
 				</div>
 				<button id="SaveConfig" type="button" class="btn btn-default"><b>Speichern</b></button>
+			</div>
+			<div id="docu" class="tab-pane fade">
+				<!--Documentation -->
+				<ul id="mdhtml"></ul>
+
+			</div>
+			<div id="mon" class="tab-pane fade">
+				<!--Monitoring -->
+				<h1>Monitoring</h1>
+
 			</div>
 		</div>
 		
