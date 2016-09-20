@@ -52,5 +52,4 @@ self.addEventListener('message', function(e) {
 		result[b] = [seriesData, components, integratedCircuits];	
 	}
 	self.postMessage(result);
-	
 }, false);
