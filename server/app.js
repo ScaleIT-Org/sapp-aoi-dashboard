@@ -9,6 +9,9 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var SSE = require('sse');
 var url = require("url");
+var graphqlHTTP = require('express-graphql');
+var { buildSchema } = require('graphql');
+var jsonToGraphql = require("json-to-graphql");
 
 		
 var app = express();
@@ -47,61 +50,6 @@ var testJsonPath = path.join(__dirname,'../data/aoiTestStep201677183729977.json'
 
 var jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
 
-
-/*http.createServer(function (request, response) {
-  var parsedURL = url.parse(request.url, true);
-  var pathname = parsedURL.pathname + "/public";
-  if (pathname === "/sse") {
-
-    response.writeHead(200, {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      "Access-Control-Allow-Origin": "*"
-    });
-
-    var padding = new Array(2049);
-    response.write(":" + padding.join(" ") + "\n"); // 2kB padding for IE
-    response.write("retry: 2000\n");
-
-    var lastEventId = Number(request.headers["last-event-id"]) || Number(parsedURL.query.lastEventId) || 0;
-
-    var timeoutId = 0;
-    var i = lastEventId;
-    var c = i + 100;
-    var f = function () {
-      if (++i < c) {
-		jsonld = JSON.parse(fs.readFileSync('aoiTestStep201677183729977.json', 'utf8'));
-        response.write("id: " + i + "\n");
-        response.write("data: " + JSON.stringify(jsonld) + "\n\n");
-        timeoutId = setTimeout(f, 5000);
-      } else {
-        response.end();
-      }
-    };
-
-    f();
-
-    response.on("close", function () {
-      clearTimeout(timeoutId);
-    });
-
-  } else {
-    if (pathname === "/") {
-      pathname = "/index.html";
-    }
-    if (pathname === "/Get") {
-        console.log("data");
-        res.jsonp(jsonld);
-    }
-    if (pathname === "/index.html" || pathname === "../eventsource.js") {
-      response.writeHead(200, {
-        "Content-Type": pathname === "/index.html" ? "text/html" : "text/javascript"
-      });
-      response.write(fs.readFileSync(__dirname + pathname));
-    }
-    response.end();
-  }
-}).listen(app.get('port'));*/
 
 app.get('/Get', function (req, res) {
 	//answer with Json object
@@ -145,5 +93,24 @@ app.get('/sse', function (req, res) {
     });
 
 });
+
+//********************GRAPHQL TESTING
+
+var schema = jsonToGraphql(jsonld);
+/*var schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);*/
+
+console.log(schema);
+
+var root = { PanelUID: () => 'Hello world!' };
+
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
 
 module.exports = app;
