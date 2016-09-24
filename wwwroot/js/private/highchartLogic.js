@@ -236,3 +236,50 @@ $(document).ready(function () {
         }]
     });
 });
+
+
+
+function dropdownBoardAction() {
+
+    var chart = $('#chart').highcharts();
+    //Hide all series 
+    $(chart.series).each(function(){
+        this.update({ showInLegend: false, visible: false});
+    });
+
+    //Show selected series
+    var selected = $('#Boards').val();
+    if(selected !== null) {
+        selected.forEach(function(i) {
+            var series = chart.get(i);
+            series.update({ showInLegend: true, visible: true});
+        });
+    }
+    chart.redraw();
+
+};
+
+function dropdownComponentAction() {
+    var chart = $('#chart').highcharts();
+    //chart.showLoading();
+    //Show selected series
+    var selected = $('#Components').val();
+    var mySeriesIndex = 0;
+    $(chart.series).each(function(){
+        var newData = [];
+        if(this.name !== "Reference"){
+            this.update({data: mySeries[mySeriesIndex]})
+            mySeries[mySeriesIndex].forEach(function(i) {
+                if(selected !== null && i.text.startsWith(selected[0])){
+                    newData.push({x: i.x, y: i.y, text: i.text});
+                }
+            });
+            mySeriesIndex++;
+        }
+        (selected !== null && selected.length < 2)? this.update({data: newData}) : null;
+        //In this case newData is empty
+        (selected == null)? this.update({data: newData}) : null;
+    });
+    chart.redraw();
+    //chart.hideLoading();
+}

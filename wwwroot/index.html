@@ -45,122 +45,14 @@
 		<!-- *********************************** Selfmade JS Magic ***************************************************-->
 		<!-- Scripts and Logic by Nico Kuhn -->
 		<!--<script src="js/private/renderMarkdownLogic.js"></script>  NOT WORKING ON CHROME-->  
-		<script src="js/private/highchartLogic.js"></script>
+		<!--<script src="js/private/highchartLogic.js"></script>-->
+		<script src="js/private/plotlyLogic.js" type="text/javascript"></script>
 		<script src="js/private/dataLogic.js" type="text/javascript"></script>
 		<script src="js/private/task.js" type="text/javascript"></script>
 
 		<!-- Get Data from DotNet Server -->
-		<!-- Debug --> <script type="text/javascript" src="./aoiTestStep201677183729977.json"> </script> -->
+		<!-- Debug --> <!--<script type="text/javascript" src="./aoiTestStep201677183729977.json"> </script> -->
 		<!-- Original --><script type="text/javascript" src="api/data/last"></script>
-
-		<script>
-			$(document).ready(function () {
-				var ref = {
-				  x: [0],
-				  y: [0],
-				  mode: 'markers',
-				  type: 'scatter',
-				  name: 'Reference',
-				  showlegend: false,
-				  text: ['Reference'],
-				  marker: {
-				  	color: 'rgba(100, 100, 100, 0.5)',
-				  	size: 12
-				  }
-				};
-
-
-
-				var data = []
-				
-				var seriesNr = 1;
-				for (b in jsonObject.BoardsUnderTest) {
-					// Add options to Bootstrap-Select 
-					$("#Boards").append($('<option>', {value: b,text: b}));
-					$('.selectpicker').selectpicker('refresh');
-					
-					var seriesData = {
-						x: [],
-						y: [],
-						mode: 'markers',
-						type: 'scatter',
-						name: 'BoardsUnderTest '+b,
-						text: [],
-						hoverinfo: "name+text+x+y",
-						marker: {
-						  	size: 12
-						}
-					};
-
-					seriesNr++;			
-					var Board = jsonObject.BoardsUnderTest[b].ComponentsUnderTest;
-					for (i in Board)
-					{	
-						if (i.startsWith('C')) {
-							//COMPONENT
-							var x = null, y = null, label = "";
-							for (j in Board[i].TestFeature)
-							{
-								if(x === null) {
-									x = parseInt(Board[i].TestFeature[j].Value);
-								} else {
-									y = parseInt(Board[i].TestFeature[j].Value);
-								}
-								label = i;
-							}
-						seriesData.x.push(x);
-						seriesData.y.push(y);
-						seriesData.text.push(label);
-						}
-						if(i.startsWith('IC') ){
-							//INTEGRATED CIRCUIT
-
-							var x = null, y = null, label = "";
-							for (j in Board[i].TestFeature)
-							{
-								var done = false;
-								if(x === null) {
-									x = parseInt(Board[i].TestFeature[j].Value);
-								} else {
-									y = parseInt(Board[i].TestFeature[j].Value);
-									done = true;
-								}
-								label = i;
-								if(done === true) {
-									seriesData.x.push(x);
-									seriesData.y.push(y);
-									seriesData.text.push(label);
-									x = null;
-									y = null;
-									done = false;
-								}
-							}
-							mySeries.push(seriesData);
-						} 
-					}
-				}
-
-
-
-
-
-
-
-				var layout = {
-					hovermode:'closest',
-					width: null,
-    				height: 600,
-				  	title:'SICK AOI DATA X, Y Shift <br> <span style="font-size: 10pt">Auftrag 5855733</span>',
-				  	colors: ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ],
-				};
-
-				Plotly.newPlot('plotly', mySeries.concat(ref), layout);
-
-				var plotDiv = document.getElementById('plotly');
-				//console.log(plotDiv.data);
-			});
-		</script>
-
 
 		<title>SICK AOI Data Systems</title>
 	</head>
