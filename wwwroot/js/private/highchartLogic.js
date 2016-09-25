@@ -1,3 +1,4 @@
+var mySeriesH = [];
 $(document).ready(function () {
     var chart = $('#chart').highcharts({
 		// exporting: {
@@ -84,7 +85,7 @@ $(document).ready(function () {
 										}
 									}
 									series.setData(seriesData);
-									mySeries.push(seriesData);
+									mySeriesH.push(seriesData);
 								} 
 							}
 						}
@@ -237,7 +238,7 @@ $(document).ready(function () {
 
 
 
-function dropdownBoardAction() {
+function dropdownBoardActionHighchart() {
 
     var chart = $('#chart').highcharts();
     //Hide all series 
@@ -257,22 +258,22 @@ function dropdownBoardAction() {
 
 };
 
-function dropdownComponentAction() {
+function dropdownComponentActionHighchart() {
     var chart = $('#chart').highcharts();
     //chart.showLoading();
     //Show selected series
     var selected = $('#Components').val();
-    var mySeriesIndex = 0;
+    var mySeriesHIndex = 0;
     $(chart.series).each(function(){
         var newData = [];
         if(this.name !== "Reference"){
-            this.update({data: mySeries[mySeriesIndex]})
-            mySeries[mySeriesIndex].forEach(function(i) {
+            this.update({data: mySeriesH[mySeriesHIndex]})
+            mySeriesH[mySeriesHIndex].forEach(function(i) {
                 if(selected !== null && i.text.startsWith(selected[0])){
                     newData.push({x: i.x, y: i.y, text: i.text});
                 }
             });
-            mySeriesIndex++;
+            mySeriesHIndex++;
         }
         (selected !== null && selected.length < 2)? this.update({data: newData}) : null;
         //In this case newData is empty

@@ -3,7 +3,6 @@
 	var jsonObject = {};
 	var init = true;
 	var sseOn = true;
-	var mySeries = [];
 
 //********************************************************************************************
 //This one is executed after all the other scripts when Page is Ready
@@ -45,13 +44,28 @@ $(document).ready(function () {
 
 		//****************************************Boards Dropdown
 		$('#Boards').on('change', function(){
-        dropdownBoardAction();
+      setTimeout( dropdownBoardActionHighchart(), 0 ); //SetTimeout(X, 0) = Async call
+      setTimeout( dropdownBoardActionPlotly(), 0 );
+        
 		});
 
 		//****************************************IC/C Selection
 		$('#Components').off().on('change', function(){
-        dropdownComponentAction();
+        setTimeout( dropdownComponentActionHighchart(), 0 );//SetTimeout(X, 0) = Async call
+        setTimeout( dropdownComponentActionPlotly(), 0 );
 		});
+
+    $('#Charts').on('change', function(){
+        var selected = $(this).val();
+        if (selected === "Plotly"){
+            $('#chart').find('.plot-container').show();
+            $('#chart').find('.highcharts-container').hide();
+        }
+        if (selected === "Highcharts") {
+          $('#chart').find('.highcharts-container').show();
+          $('#chart').find('.plot-container').hide();
+        }
+    });
 	});
 
 //*********************************************************************** Server Sent Events Listeners
@@ -74,11 +88,16 @@ $(document).ready(function () {
 //*********************************************************************** Helper Functions
   function initDropdowns(){
 
+            //Set Data
             for (b in jsonObject.BoardsUnderTest) {
               // Add options to Bootstrap-Select 
               $("#Boards").append($('<option>', {value: b,text: b}));
               $('.selectpicker').selectpicker('refresh');
             }
+
+            
+            $('#Charts').selectpicker('val', 'Plotly');
+
             //Default configuration
             //$('#Boards').selectpicker('selectAll');
             //$('#Boards').selectpicker('deselectAll');
@@ -120,7 +139,7 @@ function updateMetadata() {
  }
 
 function updateChartData() {
-        // Check for Web worker support!
+      /*  // Check for Web worker support!
       if (typeof(Worker) !== "undefined") {
             // Check if Web worker already exists!
       if (typeof(w) == "undefined") {
@@ -188,5 +207,5 @@ function updateChartData() {
       function stopWorker() { 
             w.terminate();
             w = undefined;
-      }
+      }*/
 }
