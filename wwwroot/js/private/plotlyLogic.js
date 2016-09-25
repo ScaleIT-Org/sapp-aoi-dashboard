@@ -99,6 +99,142 @@
     				height: 600,
 				  	title:'SICK AOI DATA X, Y Shift <br> <span style="font-size: 10pt">Auftrag 5855733</span>',
 				  	colors: ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ],
+				  	'shapes': [
+				        {
+				            type: 'rect',
+				            // x-reference is assigned to the x-values
+				            xref: 'x',
+				            // y-reference is assigned to the plot paper [0,1]
+				            yref: 'paper',
+				            "layer": "below",
+				            x0: -100,
+				            y0: -100,
+				            x1: 100,
+				            y1: 100,
+				            fillcolor: '#f4ff81',
+				            opacity: 1,
+				            line: {
+				                width: 0
+				            }
+				        },
+				        {
+				            type: 'rect',
+				            // x-reference is assigned to the x-values
+				            xref: 'x',
+				            // y-reference is assigned to the plot paper [0,1]
+				            yref: 'paper',
+				            "layer": "below",
+				            x0: -60,
+				            y0: -100,
+				            x1: 60,
+				            y1: 100,
+				            fillcolor: '#a5d6a7',
+				            opacity: 1,
+				            line: {
+				                width: 0
+				            }
+				        },
+				        {
+				            'type': 'line',
+				            "layer": "below",
+				            yref: 'paper',
+				            'x0': 100,
+				            'y0': -100,
+				            'x1': 100,
+				            'y1': 200,
+				            'line': {
+				                'color': 'red',
+				                'width': 2,
+				                'dash': 'dash',
+				            },
+				        },
+				        {
+				            'type': 'line',
+				            "layer": "below",
+				            xref: 'paper',
+				            'x0': -120,
+				            'y0': 140,
+				            'x1': 140,
+				            'y1': 140,
+				            'line': {
+				                'color': 'red',
+				                'width': 2,
+				                'dash': 'dash',
+				            },
+				        },
+				    ],
+				    /*annotations: [
+				    {
+				    	"layer": "below",
+				    	xref: 'x',
+				    	xref: 'y',
+				    	xanchor: 'left',
+    					yanchor: 'bottom',
+    					showarrow: false,
+				      x: 100,
+				      y: 5,
+				      text: 'Annotation Text',
+				      showarrow: true,
+				      arrowhead: 7,
+				      ax: 0,
+				      ay: -40
+				    }
+				  ]*/
+				  annotations: [
+					    {
+					      x: 30,
+					      y: 0,
+					      "xref": "x", 
+                		  "yref": "paper",
+					      text: 'Toleranz X',
+					      showarrow: false,
+					      
+					    },
+					    {
+					      x: -30,
+					      y: 0,
+					      "xref": "x", 
+                		  "yref": "paper",
+					      text: 'Toleranz -X',
+					      showarrow: false,
+					      
+					    },
+					    {
+					      x: 80,
+					      y: 0,
+					      "xref": "x", 
+                		  "yref": "paper",
+					      text: 'Warnung X',
+					      showarrow: false,
+					      
+					    },
+					    {
+					      x: -80,
+					      y: 0,
+					      "xref": "x", 
+                		  "yref": "paper",
+					      text: 'Warnung -X',
+					      showarrow: false,
+					      
+					    },
+					    {
+					      x: 0,
+					      y: 147,
+					      "xref": "paper", 
+                		  "yref": "y",
+					      text: 'Toleranz y',
+					      showarrow: false,
+					      
+					    },
+					    {
+					      x: 93,
+					      y: 1,
+					      "xref": "x", 
+                		  "yref": "paper",
+					      text: 'Toleranz X',
+					      showarrow: false,
+					    }
+					  ]
 				};
 
 				Plotly.newPlot('plotly', mySeries.concat(ref), layout);
