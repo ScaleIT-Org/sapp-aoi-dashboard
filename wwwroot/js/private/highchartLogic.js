@@ -30,10 +30,8 @@ $(document).ready(function () {
             	load : function() {
 						var seriesNr = 1;
 						var chart = $('#chart').highcharts();
+
 						for (b in jsonObject.BoardsUnderTest) {
-							// Add options to Bootstrap-Select 
-							$("#Boards").append($('<option>', {value: b,text: b}));
-							$('.selectpicker').selectpicker('refresh');
 							
 							var seriesData = [];
 							chart.addSeries({ 

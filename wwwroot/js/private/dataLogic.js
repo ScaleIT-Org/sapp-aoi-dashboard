@@ -73,6 +73,12 @@ $(document).ready(function () {
 
 //*********************************************************************** Helper Functions
   function initDropdowns(){
+
+            for (b in jsonObject.BoardsUnderTest) {
+              // Add options to Bootstrap-Select 
+              $("#Boards").append($('<option>', {value: b,text: b}));
+              $('.selectpicker').selectpicker('refresh');
+            }
             //Default configuration
             //$('#Boards').selectpicker('selectAll');
             //$('#Boards').selectpicker('deselectAll');

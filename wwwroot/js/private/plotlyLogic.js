@@ -23,9 +23,6 @@
 				var seriesNr = 1;
 				colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ]
 				for (b in jsonObject.BoardsUnderTest) {
-					// Add options to Bootstrap-Select 
-					$("#Boards").append($('<option>', {value: b,text: b}));
-					$('.selectpicker').selectpicker('refresh');
 					
 					var seriesData = {
 						id: b,
@@ -37,7 +34,7 @@
 						showlegend: true,
 				  		visible: false,
 						text: [],
-						hoverinfo: "name+text+x+y",
+						hoverinfo: "x+y+text",
 						marker: {
 						  	size: 12,
 						  	color: colors[seriesNr - 1]
@@ -97,6 +94,7 @@
 					hovermode:'closest',
 					width: null,
     				height: 600,
+    				legend: {"orientation": "h"},
 				  	title:'SICK AOI DATA X, Y Shift <br> <span style="font-size: 10pt">Auftrag 5855733</span>',
 				  	colors: ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ],
 				  	'shapes': [
@@ -163,23 +161,6 @@
 				            },
 				        },
 				    ],
-				    /*annotations: [
-				    {
-				    	"layer": "below",
-				    	xref: 'x',
-				    	xref: 'y',
-				    	xanchor: 'left',
-    					yanchor: 'bottom',
-    					showarrow: false,
-				      x: 100,
-				      y: 5,
-				      text: 'Annotation Text',
-				      showarrow: true,
-				      arrowhead: 7,
-				      ax: 0,
-				      ay: -40
-				    }
-				  ]*/
 				  annotations: [
 					    {
 					      x: 30,
@@ -237,10 +218,10 @@
 					  ]
 				};
 
-				Plotly.newPlot('plotly', mySeries.concat(ref), layout);
+				Plotly.newPlot('chart', mySeries.concat(ref), layout);
 
 				//console.log(mySeries[1].id );
-				Plotly.redraw('plotly');
+				Plotly.redraw('chart');
 			});
 
 			function dropdownBoardAction() {
@@ -261,7 +242,7 @@
 					    });
 			        });
 			    }
-			    Plotly.redraw('plotly');
+			    Plotly.redraw('chart');
 
 			};
 
@@ -275,7 +256,7 @@
 			        var newData = [];
 
 		            //this.update({data: mySeries[mySeriesIndex]})
-		            var plotData = document.getElementById('plotly');
+		            var plotData = document.getElementById('chart');
 		            plotData.data[mySeriesIndex].x = JSON.parse(JSON.stringify(j.x));
 		            plotData.data[mySeriesIndex].y = JSON.parse(JSON.stringify(j.y));
 		            plotData.data[mySeriesIndex].text = JSON.parse(JSON.stringify(j.text));
@@ -297,12 +278,12 @@
 		                } 
 		                index++;
 		            });
-		            var plotData = document.getElementById('plotly');
+		            var plotData = document.getElementById('chart');
 		            plotData.data[mySeriesIndex].x = newX;
 		            plotData.data[mySeriesIndex].y = newY;
 		            plotData.data[mySeriesIndex].text = newText;
 		            mySeriesIndex++;
 
 			    });
-			    Plotly.redraw('plotly');
+			    Plotly.redraw('chart');
 			}
