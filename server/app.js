@@ -9,6 +9,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var SSE = require('sse');
 var url = require("url");
+var fs = require('fs');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var jsonToGraphql = require("json-to-graphql");
@@ -45,7 +46,6 @@ app.get('/', function (req, res)
 });
 
 //Read JSONLD file
-var fs = require('fs');
 var testJsonPath = path.join(__dirname,'../data/aoiTestStep201677183729977.json');
 
 var jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
@@ -96,21 +96,19 @@ app.get('/sse', function (req, res) {
 
 //********************GRAPHQL TESTING
 
-var schema = jsonToGraphql(jsonld);
-/*var schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);*/
+var testJsonSchemaPath = path.join(__dirname,'../data/aoiTestSchema.json');
 
-console.log(schema);
+var jsonSchemadata = JSON.parse(fs.readFileSync(testJsonSchemaPath, 'utf8'));
 
-var root = { PanelUID: () => 'Hello world!' };
+//var Schema = jsonToGraphql(jsonSchemadata);
+//console.log(Schema);
+
+var schema = require('./schema')
+var query = 'query { todos { id, title, completed } }'
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
-  rootValue: root,
-  graphiql: true,
+  graphiql: true
 }));
 
 module.exports = app;

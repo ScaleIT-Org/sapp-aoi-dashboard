@@ -1,0 +1,10 @@
+{
+  "BoardsUnderTest": {
+    "xxx": {
+      "ComponentsUnderTest": 123
+    },
+    "xxx": {
+      "ComponentsUnderTest": 999
+    }
+  }
+}
