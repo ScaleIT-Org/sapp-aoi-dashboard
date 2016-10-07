@@ -1,50 +1,53 @@
 var graphql = require ('graphql');
-var path = require('path');
-var fs = require('fs');
 
-var testJsonSchemaPath = path.join(__dirname,'../data/aoiTestSchema.json');
-var jsonSchemadata = JSON.parse(fs.readFileSync(testJsonSchemaPath, 'utf8'));
 
-// Here is some dummy data to make this piece of code simpler.
-// It will be changeable after introducing mutation.
-var TODOs = [
-  {
-    "id": 1446412739542,
-    "title": "Read emails",
-    "completed": false
-  },
-  {
-    "id": 1446412740883,
-    "title": "Buy orange",
-    "completed": true
-  }
-];
-
-var parsedData = [
-{"BoardsUnderTest": {
-    "XXX": {
+var dummyData = 
+{ "OperatorName": "",
+  "PanelUID": "382758",
+  "Layer": "B",
+  "PartNumber": "2060817",
+  "ChangeIdx": "",
+  "WrongDefectCount": 0,
+  "StartTime": "2016-06-08T10:33:50",
+  "StopTime": "2016-06-08T10:34:11",
+  "Duration": 17,
+  "TestResult": false,
+  "OrderNo": 0,
+  "DefectCount": 1,
+  "BoardsPassedCount": 0,
+  "BoardsFailedCount": 0,
+  "BoardsUnderTest": {
+    "BrdNr": {
       "ComponentsUnderTest": {
         "C11": {
           "TestFeature": {
-            "bla": 123,
-            "blabla": 234 
-          },
-          "TestFeature": {
-            "bla": 3,
-            "blabla": 4 
+            "XShift": {
+              "Value": "-17",
+              "Name": "C0603-MENI-901-X-Shift",
+              "AnalysisMode": "MENI",
+              "FeatureFlag": "0",
+              "WindowNumber": "901"
+            },
+            "YShift": {
+              "Value": "67",
+              "Name": "C0603-MENI-901-Y-Shift",
+              "AnalysisMode": "MENI",
+              "FeatureFlag": "0",
+              "WindowNumber": "901"
+            }
           },
           "Name": "C1-1",
           "Type": "C0603",
           "Position": "1"
+        }
         }
       },
       "TestResult": true,
       "IsBadBoard": false,
       "BoardUID": "3827581"
     }
-  }
 }
-];
+;
 
 
 var queryType = new graphql.GraphQLObjectType({
@@ -52,9 +55,9 @@ var queryType = new graphql.GraphQLObjectType({
   fields: function () {
     return {
       aoi: {
-        type: new graphql.GraphQLList(BoardsUnderTest),
+        type: new graphql.GraphQLNonNull(BoardsUnderTest),
         resolve: function () {
-          return parsedData;
+          return dummyData;
         }
       }
     }
@@ -66,17 +69,59 @@ var BoardsUnderTest = new graphql.GraphQLObjectType({
   fields: function () {
     return {
       'BoardsUnderTest': {
-        type: new graphql.GraphQLNonNull(XXX),
-      }
+        type: new graphql.GraphQLNonNull(BrdNr),
+      },
+      "OperatorName":  {
+        type: graphql.GraphQLString,
+      },
+      "PanelUID":  {
+        type: graphql.GraphQLString,
+      },
+      "Layer":  {
+        type: graphql.GraphQLString,
+      },
+      "PartNumber":  {
+        type: graphql.GraphQLString,
+      },
+      "ChangeIdx":  {
+        type: graphql.GraphQLString,
+      },
+      "WrongDefectCount":  {
+        type: graphql.GraphQLString,
+      },
+      "StartTime":  {
+        type: graphql.GraphQLString,
+      },
+      "StopTime":  {
+        type: graphql.GraphQLString,
+      },
+      "Duration":  {
+        type: graphql.GraphQLString,
+      },
+      "TestResult":  {
+        type: graphql.GraphQLString,
+      },
+      "OrderNo":  {
+        type: graphql.GraphQLString,
+      },
+      "DefectCount":  {
+        type: graphql.GraphQLString,
+      },
+      "BoardsPassedCount":  {
+        type: graphql.GraphQLString,
+      },
+      "BoardsFailedCount":  {
+        type: graphql.GraphQLString,
+      },
     }
   }
 });
 
-var XXX = new graphql.GraphQLObjectType({
-  name: 'XXX',
+var BrdNr = new graphql.GraphQLObjectType({
+  name: 'BrdNr',
   fields: function () {
     return {
-      'XXX': {
+      'BrdNr': {
         type: new graphql.GraphQLNonNull(ComponentsUnderTest),
       }
     }
@@ -99,32 +144,8 @@ var component = new graphql.GraphQLObjectType({
   fields: function () {
     return {
       'C11': {
-        type: new graphql.GraphQLList(TFType),
-
+        type: new graphql.GraphQLNonNull(TestFeature),
       }
-    }
-  }
-});
-
-
-const TestFeatureType = new graphql.GraphQLObjectType({
-  name: 'TestFeatureType',
-  fields: {
-    bla: {
-      type: graphql.GraphQLString
-    },
-    blabla: {
-      type: graphql.GraphQLString
-    }
-  }
-});
-
-const TFType = new graphql.GraphQLObjectType({
-  name: 'TFType',
-  fields: {
-    TestFeature: {
-      type: new graphql.GraphQLList(TestFeatureType),
-
     }
   }
 });
@@ -135,6 +156,73 @@ var TestFeature = new graphql.GraphQLObjectType({
   fields: function () {
     return {
       'TestFeature': {
+        type: new graphql.GraphQLNonNull(shift),
+      },
+      'Name': {
+        type: graphql.GraphQLString,
+      },
+      'Type': {
+        type: graphql.GraphQLString,
+      },
+      'Position': {
+        type: graphql.GraphQLString,
+      },
+    }
+  }
+});
+
+var shift = new graphql.GraphQLObjectType({
+  name: 'shift',
+  fields: function () {
+    return {
+      'XShift': {
+        type: new graphql.GraphQLNonNull(Xshift),
+      },
+      'YShift': {
+        type: new graphql.GraphQLNonNull(Yshift),
+      }
+    }
+  }
+});
+var Xshift = new graphql.GraphQLObjectType({
+  name: 'Xshift',
+  fields: function () {
+    return {
+      "Value":  {
+        type: graphql.GraphQLString,
+      },
+      "Name":  {
+        type: graphql.GraphQLString,
+      },
+      "AnalysisMode":  {
+        type: graphql.GraphQLString,
+      },
+      "FeatureFlag":  {
+        type: graphql.GraphQLString,
+      },
+      "WindowNumber":  {
+        type: graphql.GraphQLString,
+      }
+    }
+  }
+});
+var Yshift = new graphql.GraphQLObjectType({
+  name: 'Yshift',
+  fields: function () {
+    return {
+      "Value":  {
+        type: graphql.GraphQLString,
+      },
+      "Name":  {
+        type: graphql.GraphQLString,
+      },
+      "AnalysisMode":  {
+        type: graphql.GraphQLString,
+      },
+      "FeatureFlag":  {
+        type: graphql.GraphQLString,
+      },
+      "WindowNumber":  {
         type: graphql.GraphQLString,
       }
     }

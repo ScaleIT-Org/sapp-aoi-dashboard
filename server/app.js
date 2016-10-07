@@ -96,13 +96,6 @@ app.get('/sse', function (req, res) {
 
 //********************GRAPHQL TESTING
 
-var testJsonSchemaPath = path.join(__dirname,'../data/aoiTestSchema.json');
-
-var jsonSchemadata = JSON.parse(fs.readFileSync(testJsonSchemaPath, 'utf8'));
-
-//var Schema = jsonToGraphql(jsonSchemadata);
-//console.log(Schema);
-
 var schema = require('./schema')
 var query = 'query { todos { id, title, completed } }'
 
