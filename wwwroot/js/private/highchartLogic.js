@@ -1,4 +1,3 @@
-var mySeriesH = [];
 $(document).ready(function () {
     var chart = $('#chart').highcharts({
 		// exporting: {
@@ -29,6 +28,9 @@ $(document).ready(function () {
             height: 600,
             events : {
             	load : function() {
+                        if (jsonObject === undefined){
+                          return;
+                        } 
 						var seriesNr = 1;
 						var chart = $('#chart').highcharts();
 
@@ -267,7 +269,7 @@ function dropdownComponentActionHighchart() {
     $(chart.series).each(function(){
         var newData = [];
         if(this.name !== "Reference"){
-            this.update({data: mySeriesH[mySeriesHIndex]})
+            this.update({data: mySeriesH[mySeriesHIndex]});
             mySeriesH[mySeriesHIndex].forEach(function(i) {
                 if(selected !== null && i.text.startsWith(selected[0])){
                     newData.push({x: i.x, y: i.y, text: i.text});
@@ -281,4 +283,44 @@ function dropdownComponentActionHighchart() {
     });
     chart.redraw();
     //chart.hideLoading();
+}
+
+function updateChartDataHighchart(e) {
+    var chart = $('#chart').highcharts();
+            if (chart !== undefined) {
+                  mySeriesH = [];
+                  var answer = e.data;
+                  //Update Dropdown Menue
+                  for (b in jsonObject.BoardsUnderTest) {
+                        if (chart !== undefined && !chart.get(b)) {
+                              //Create new Series
+                              $("#Boards").append($('<option>', {value: b,text: b}));
+                              //Set New Entry to Active
+                              //$("#Boards").selectpicker('val', ($("#Boards").selectpicker('val') == null)? [b] : $("#Boards").selectpicker('val').concat([b]));
+
+                              $('.selectpicker').selectpicker('refresh');
+
+                              chart.addSeries({ 
+                                    id: b,
+                                    name: 'BoardsUnderTest '+b,
+                                    showInLegend: false, 
+                                    visible: false,
+                                    data: []
+                              });
+                        }
+                  }
+
+                  //Update Chart Series
+                  for (b in answer) {
+                        var series = chart.get(b);
+                        var selected = $('#Components').val();
+
+                        (selected !== null && selected.length == 2)? series.setData(answer[b][0]) : null;
+                        (selected !== null && selected.length == 1 && selected[0] == "C")? series.setData(answer[b][1]) : null ;
+                        (selected !== null && selected.length == 1 && selected[0] == "IC")? series.setData(answer[b][2]) :  null;
+                        (selected == null)? series.setData([]) : null;
+
+                        mySeriesH.push(answer[b][0]);
+                  }
+            }
 }

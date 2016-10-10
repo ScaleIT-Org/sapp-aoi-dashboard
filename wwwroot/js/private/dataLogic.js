@@ -1,20 +1,21 @@
 //************************************************************************* Globale Variablen
 	var ajaxUrl = "http://localhost:3000/Get/";
-	var jsonObject = {};
+	var jsonObject;
 	var init = true;
-	var sseOn = true;
+	var sseOn = false;
+  var mySeriesH = [];
 
 //********************************************************************************************
 //This one is executed after all the other scripts when Page is Ready
 	$(window).bind('load', function(){
 		//Do initial ajax call
 		doAjax(); 
-		//Initial Dropdown configuration
-		initDropdowns();
-		//Update the chart data
-		updateChartData();
-		//Crawl and show Metadata
-		updateMetadata();
+    //Initial Dropdown configuration
+    initDropdowns();
+    //Update the chart data
+    updateChartData();
+    //Crawl and show Metadata
+    updateMetadata();
 	});
 
 //*********************************************************************** Register I/O Handlers
@@ -77,6 +78,7 @@ $(document).ready(function () {
   	if (sseOn == true) {
 		jsonObject = JSON.parse(event.data);
 		($('#chart').highcharts() !== undefined) ? updateChartData() : null;
+    updateMetadata();
 	}
   }, false);
   
@@ -88,49 +90,70 @@ $(document).ready(function () {
 //*********************************************************************** Helper Functions
   function initDropdowns(){
 
-            //Set Data
-            for (b in jsonObject.BoardsUnderTest) {
-              // Add options to Bootstrap-Select 
-              $("#Boards").append($('<option>', {value: b,text: b}));
-              $('.selectpicker').selectpicker('refresh');
-            }
+    if (jsonObject === undefined){
+      return;
+    } 
 
-            
-            $('#Charts').selectpicker('val', 'Plotly');
+    //Set Data
+    for (b in jsonObject.BoardsUnderTest) {
+      // Add options to Bootstrap-Select 
+      $("#Boards").append($('<option>', {value: b,text: b}));
+      $('.selectpicker').selectpicker('refresh');
 
-            //Default configuration
-            //$('#Boards').selectpicker('selectAll');
-            //$('#Boards').selectpicker('deselectAll');
-            $('#Boards').selectpicker('val', '3827582');
+      var chart = $('#chart').highcharts();
+      chart.addSeries({ 
+            id: b,
+            name: 'BoardsUnderTest '+b,
+            showInLegend: false, 
+            visible: false,
+            data: []
+      });
 
-            //select from C, IC
-            //$('#Components').selectpicker('selectAll');
-            //$('#Components').selectpicker('deselectAll');
-            $('#Components').selectpicker('val', 'C');
+    }
+    
+    $('#Charts').selectpicker('val', 'Highcharts');
 
-            //$('#Boards').selectpicker('refresh');
-            //$('#Components').selectpicker('refresh');
-            $('.selectpicker').trigger('refresh');
-            $('.selectpicker').trigger('change');
+    //Default configuration
+    //$('#Boards').selectpicker('selectAll');
+    //$('#Boards').selectpicker('deselectAll');
+    $('#Boards').selectpicker('val', '3827582');
+
+    //select from C, IC
+    //$('#Components').selectpicker('selectAll');
+    //$('#Components').selectpicker('deselectAll');
+    $('#Components').selectpicker('val', 'C');
+
+    //$('#Boards').selectpicker('refresh');
+    //$('#Components').selectpicker('refresh');
+    $('.selectpicker').trigger('refresh');
+    $('.selectpicker').trigger('change');
 }
 
-function doAjax() {
-       $.ajax({
-            dataType: 'jsonp',
-            data: "data=yeah",                      
-            jsonp: 'callback',
-            url: ajaxUrl,                     
-            success: function(data) {
-                  jsonObject = data;
-            }
-      });
+function doAjax() {           
+   $.ajax({
+        dataType: 'jsonp',
+        data: "data=yeah",                      
+        jsonp: 'callback',
+        url: ajaxUrl,                     
+        success: function(data) {
+              jsonObject = data;
+              //Update the chart data
+              updateChartData();
+              //Initial Dropdown configuration
+              initDropdowns();
+              //Crawl and show Metadata
+              updateMetadata();
+        }
+  });
 }
 
 //Crawl and show Json Metadata
 function updateMetadata() {
+      if (jsonObject === undefined){
+        return;
+      } 
       var str = "";
       for (i in jsonObject){
-
             if (i != "BoardsUnderTest") {
             str += i + ""+" : "+ jsonObject[i]+""+"<br>";
             }
@@ -139,7 +162,10 @@ function updateMetadata() {
  }
 
 function updateChartData() {
-      /*  // Check for Web worker support!
+      if (jsonObject === undefined){
+        return;
+      } 
+      // Check for Web worker support!
       if (typeof(Worker) !== "undefined") {
             // Check if Web worker already exists!
       if (typeof(w) == "undefined") {
@@ -152,7 +178,6 @@ function updateChartData() {
 
                   //Start Web Worker Crawling Data
                   w.postMessage(jsonObject); // Send data to our worker.     
-
             } else {
                   console.log("worker busy")
             }
@@ -161,51 +186,14 @@ function updateChartData() {
       }
 
       w.addEventListener('message', function(e) {
+            updateChartDataHighchart(e);
 
-            var chart = $('#chart').highcharts();
-            if (chart !== undefined) {
-                  mySeries = [];
-                  var answer = e.data;
-
-                  //Update Dropdown Menue
-                  for (b in jsonObject.BoardsUnderTest) {
-                        if (chart !== undefined && !chart.get(b)) {
-                              //Create new Series
-                              $("#Boards").append($('<option>', {value: b,text: b}));
-
-                              //Set New Entry to Active
-                              //$("#Boards").selectpicker('val', ($("#Boards").selectpicker('val') == null)? [b] : $("#Boards").selectpicker('val').concat([b]));
-
-                              $('.selectpicker').selectpicker('refresh');
-
-                              chart.addSeries({ 
-                                    id: b,
-                                    name: 'BoardsUnderTest '+b,
-                                    showInLegend: false, 
-                                    visible: false,
-                                    data: []
-                              });
-                        }
-                  }
-
-                  //Update Chart Series
-                  for (b in answer) {
-                        var series = chart.get(b);
-                        var selected = $('#Components').val();
-
-                        (selected !== null && selected.length == 2)? series.setData(answer[b][0]) : null;
-                        (selected !== null && selected.length == 1 && selected[0] == "C")? series.setData(answer[b][1]) : null ;
-                        (selected !== null && selected.length == 1 && selected[0] == "IC")? series.setData(answer[b][2]) :  null;
-                        (selected == null)? series.setData([]) : null;
-                        
-                        mySeries.push(answer[b][0]);
-                  }
-            }
+            
             stopWorker();
       }, false);  
                   
       function stopWorker() { 
             w.terminate();
             w = undefined;
-      }*/
+      }
 }

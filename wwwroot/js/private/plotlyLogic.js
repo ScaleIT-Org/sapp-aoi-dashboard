@@ -1,6 +1,9 @@
 	var mySeries = [];
 	var seriesBackup = [];
 	$(document).ready(function () {
+		if (jsonObject === undefined){
+	      return;
+	    } 
 		var ref = {
 		  x: [0],
 		  y: [0],
@@ -223,7 +226,6 @@
 
 		Plotly.newPlot('chart', mySeries.concat(ref), layout);
 
-		//console.log(mySeries[1].id );
 		Plotly.redraw('chart');
 	});
 
@@ -245,6 +247,7 @@
 	        });
 	    }
 	    Plotly.redraw('chart');
+
 
 	};
 
@@ -288,4 +291,8 @@
 
 	    });
 	    Plotly.redraw('chart');
+	}
+
+	function updateChartDataPlotly(e) {
+		//TODO
 	}
