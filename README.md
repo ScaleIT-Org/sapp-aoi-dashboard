@@ -26,23 +26,23 @@ Feature_Branch	Master	Standalone
 ```
 ~~~~
 
-#Features
+# Features
 
-* ###Plot Librarys
+* ### Plot Librarys
 	* Plot.ly
 	* Highcharts
 
-* ###Server Sent Events
+* ### Server Sent Events
 
-* ###Web Workers
+* ### Web Workers
 
-* ###AJAX Call
+* ### AJAX Call
 
-* ###Bootstrap / Bootstrap-Select
+* ### Bootstrap / Bootstrap-Select
 
-* ###Markdown Renderer
+* ### Markdown Renderer
 
-* ###GraphQL
+* ### GraphQL
 
 
 
@@ -95,5 +95,5 @@ Feature_Branch	Master	Standalone
 }
 ```
 
-###Known Bugs
+### Known Bugs
   * SSE with dynamic Data Update is just working with Highcharts implementation (Not yet implemented for plotly)

@@ -56,6 +56,15 @@ app.get('/Get', function (req, res) {
 	res.jsonp(jsonld);
 });
 
+
+var testMarkdownPath = path.join(__dirname,'../README.md');
+var readme = fs.readFileSync(testMarkdownPath, 'utf8');
+
+app.get('/md', function (req, res) {
+  //answer with Markdown object
+  res.send(readme);
+});
+
 app.get('/sse', function (req, res) {
   var parsedURL = url.parse(req.url, true);
   var pathname = parsedURL.pathname + "/data";
