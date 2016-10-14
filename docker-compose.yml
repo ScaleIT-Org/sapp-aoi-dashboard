@@ -1,0 +1,7 @@
+aoi-vis-app:
+        image: scaleit/aoi-vis-app
+        ports:
+                - "3000:3000"
+        expose:
+                - 3000
+                

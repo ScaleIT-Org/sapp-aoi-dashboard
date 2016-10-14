@@ -11,7 +11,7 @@ var SSE = require('sse');
 var url = require("url");
 var fs = require('fs');
 var graphqlHTTP = require('express-graphql');
-var { buildSchema } = require('graphql');
+var  buildSchema  = require('graphql');
 var jsonToGraphql = require("json-to-graphql");
 
 		
