@@ -84,11 +84,12 @@ app.get('/sse', function (req, res) {
     var timeoutId = 0;
     var i = lastEventId;
     var c = i + 100;
+
     var f = function () {
       if (++i < c) {
-    jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
+        jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
         res.write("id: " + i + "\n");
-        res.write("data: " + JSON.stringify(jsonld) + "\n\n");
+        res.write("data: " + JSON.stringify({"si": sidata, "data" : jsonld}) + "\n\n");
         timeoutId = setTimeout(f, 5000);
       } else {
         res.end();
@@ -102,6 +103,17 @@ app.get('/sse', function (req, res) {
     });
 
 });
+
+//********************System Information
+
+var si = require('systeminformation');
+var sidata = {};
+
+setInterval(function gatherData() {
+  si.getAllData(function (data) {
+         sidata = data;
+  }, null, null);
+}, 5000);
 
 //********************GRAPHQL TESTING
 

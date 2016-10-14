@@ -12,7 +12,8 @@
     "ejs": "^2.5.1",
     "express": "3.2.4",
     "sse": "0.0.6",
-    "stylus": "*"
+    "stylus": "*",
+    "systeminformation": "^3.6.0"
   },
   "scripts": {
     "start": "node app.js"

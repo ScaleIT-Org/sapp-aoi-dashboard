@@ -1,8 +1,9 @@
 //************************************************************************* Globale Variablen
 	var ajaxUrl = "http://localhost:3000/Get/";
 	var jsonObject;
+  var sidata;
 	var init = true;
-	var sseOn = false;
+	var sseOn = true;
   var mySeriesH = [];
 
 //********************************************************************************************
@@ -10,10 +11,10 @@
 	$(window).bind('load', function(){
 		//Do initial ajax call
 		doAjax(); 
-    //Initial Dropdown configuration
-    initDropdowns();
     //Update the chart data
     updateChartData();
+    //Initial Dropdown configuration
+    initDropdowns();
     //Crawl and show Metadata
     updateMetadata();
 	});
@@ -76,8 +77,10 @@ $(document).ready(function () {
   
   es.addEventListener("message", function(event){
   	if (sseOn == true) {
-		jsonObject = JSON.parse(event.data);
+		jsonObject = JSON.parse(event.data).data;
+    sidata = JSON.parse(event.data).si;
 		($('#chart').highcharts() !== undefined) ? updateChartData() : null;
+    setTimeout(updateMonitoringData(), 0 );
     updateMetadata();
 	}
   }, false);
@@ -134,15 +137,10 @@ function doAjax() {
         dataType: 'jsonp',
         data: "data=yeah",                      
         jsonp: 'callback',
-        url: ajaxUrl,                     
+        url: ajaxUrl,
+        async: false,                     
         success: function(data) {
               jsonObject = data;
-              //Update the chart data
-              updateChartData();
-              //Initial Dropdown configuration
-              initDropdowns();
-              //Crawl and show Metadata
-              updateMetadata();
         }
   });
 }
