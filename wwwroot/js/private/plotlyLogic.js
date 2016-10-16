@@ -1,10 +1,5 @@
-	var mySeries = [];
-	var seriesBackup = [];
-	$(document).ready(function () {
-		if (jsonObject === undefined){
-	      return;
-	    } 
-		var ref = {
+	var mySeries = [{
+		  id: "ref",
 		  x: [0],
 		  y: [0],
 		  mode: 'markers',
@@ -17,12 +12,30 @@
 		  	color: 'rgba(100, 100, 100, 0.5)',
 		  	size: 12
 		  }
-		};
+		}];
+	var seriesBackup = [{
+		  id: "ref",
+		  x: [0],
+		  y: [0],
+		  mode: 'markers',
+		  type: 'scatter',
+		  name: 'Reference',
+		  showlegend: false,
+		  visible: true,
+		  text: ['Reference'],
+		  marker: {
+		  	color: 'rgba(100, 100, 100, 0.5)',
+		  	size: 12
+		  }
+		}];
 
-
+	$(document).ready(function () {
+		if (jsonObject === undefined){
+          return;
+        } 
 
 		var data = []
-		
+		var addIndex = 1;
 		var seriesNr = 1;
 		colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ]
 		for (b in jsonObject.BoardsUnderTest) {
@@ -87,8 +100,9 @@
 							done = false;
 						}
 					}
-					mySeries.push(seriesData);
-					seriesBackup.push(JSON.parse(JSON.stringify(seriesData)));
+					mySeries[addIndex] = seriesData;
+					seriesBackup[addIndex] = (JSON.parse(JSON.stringify(seriesData)));
+					addIndex++;
 				} 
 			}
 		}
@@ -224,15 +238,15 @@
 			  ]
 		};
 
-		Plotly.newPlot('chart', mySeries.concat(ref), layout);
-
-		Plotly.redraw('chart');
+		Plotly.newPlot('chart2', mySeries, layout);
 	});
 
 	function dropdownBoardActionPlotly() {
 	    //Hide all series 
 	    mySeries.forEach(function(i) {
-	    	i.visible = false;
+	    	if (i.id != "ref") {
+	    		i.visible = false;
+	    	}
 	    });
 
 	    //Show selected series
@@ -246,10 +260,8 @@
 			    });
 	        });
 	    }
-	    Plotly.redraw('chart');
-
-
-	};
+	    Plotly.redraw('chart2');
+	}
 
 	function dropdownComponentActionPlotly() {
 	    //Show selected series
@@ -257,11 +269,10 @@
 	    var mySeriesIndex = 0;
 	    
 	    seriesBackup.forEach(function(j){
-	    	//console.log(j);
 	        var newData = [];
 
 	        //this.update({data: mySeries[mySeriesIndex]})
-	        var plotData = document.getElementById('chart');
+	        var plotData = document.getElementById('chart2');
 	        plotData.data[mySeriesIndex].x = JSON.parse(JSON.stringify(j.x));
 	        plotData.data[mySeriesIndex].y = JSON.parse(JSON.stringify(j.y));
 	        plotData.data[mySeriesIndex].text = JSON.parse(JSON.stringify(j.text));
@@ -283,16 +294,54 @@
 	            } 
 	            index++;
 	        });
-	        var plotData = document.getElementById('chart');
+	        var plotData = document.getElementById('chart2');
 	        plotData.data[mySeriesIndex].x = newX;
 	        plotData.data[mySeriesIndex].y = newY;
 	        plotData.data[mySeriesIndex].text = newText;
 	        mySeriesIndex++;
 
 	    });
-	    Plotly.redraw('chart');
+	    Plotly.redraw('chart2');
 	}
 
 	function updateChartDataPlotly(e) {
-		//TODO
+
+	    var seriesNr = 1;
+	    var addIndex = 1;
+		colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ]
+	    for(b in e.data) {
+	    	var seriesData = {
+				id: b,
+				x: [],
+				y: [],
+				mode: 'markers',
+				type: 'scatter',
+				name: 'BoardsUnderTest '+b,
+				showlegend: true,
+		  		visible: false,
+				text: [],
+				hoverinfo: "x+y+text",
+				marker: {
+				  	size: 12,
+				  	color: colors[seriesNr - 1]
+				}
+			};
+			seriesNr++;
+			for(i in e.data[b][0]) {
+				seriesData.x.push(e.data[b][0][i].x);
+				seriesData.y.push(e.data[b][0][i].y);
+				seriesData.text.push(e.data[b][0][i].text);
+			};
+			console.log(b);
+			mySeries[addIndex] = seriesData;
+			seriesBackup[addIndex] = (JSON.parse(JSON.stringify(seriesData)));
+			addIndex++;
+
+	    };
+
+		//dropdownComponentActionPlotly;
+		dropdownBoardActionPlotly();
 	}
+
+
+

@@ -45,7 +45,7 @@ $(document).ready(function () {
 		};
 
 		//****************************************Boards Dropdown
-		$('#Boards').on('change', function(){
+		$('#Boards').off().on('change', function(){
       setTimeout( dropdownBoardActionHighchart(), 0 ); //SetTimeout(X, 0) = Async call
       setTimeout( dropdownBoardActionPlotly(), 0 );
         
@@ -53,19 +53,19 @@ $(document).ready(function () {
 
 		//****************************************IC/C Selection
 		$('#Components').off().on('change', function(){
-        setTimeout( dropdownComponentActionHighchart(), 0 );//SetTimeout(X, 0) = Async call
-        setTimeout( dropdownComponentActionPlotly(), 0 );
+      setTimeout( dropdownComponentActionHighchart(), 0 );//SetTimeout(X, 0) = Async call
+      setTimeout( dropdownComponentActionPlotly(), 0 );
 		});
 
-    $('#Charts').on('change', function(){
+    $('#Charts').off().on('change', function(){
         var selected = $(this).val();
         if (selected === "Plotly"){
-            $('#chart').find('.plot-container').show();
+            $('#chart2').find('.plot-container').show();
             $('#chart').find('.highcharts-container').hide();
         }
         if (selected === "Highcharts") {
           $('#chart').find('.highcharts-container').show();
-          $('#chart').find('.plot-container').hide();
+          $('#chart2').find('.plot-container').hide();
         }
     });
 	});
@@ -103,18 +103,18 @@ $(document).ready(function () {
       $("#Boards").append($('<option>', {value: b,text: b}));
       $('.selectpicker').selectpicker('refresh');
 
-      var chart = $('#chart').highcharts();
+      /*var chart = $('#chart').highcharts();
       chart.addSeries({ 
             id: b,
             name: 'BoardsUnderTest '+b,
             showInLegend: false, 
             visible: false,
             data: []
-      });
+      });*/
 
     }
     
-    $('#Charts').selectpicker('val', 'Highcharts');
+    $('#Charts').selectpicker('val', 'Plotly');
 
     //Default configuration
     //$('#Boards').selectpicker('selectAll');
@@ -184,7 +184,8 @@ function updateChartData() {
       }
 
       w.addEventListener('message', function(e) {
-            updateChartDataHighchart(e);
+          updateChartDataHighchart(e);
+          updateChartDataPlotly(e);
 
             
             stopWorker();
