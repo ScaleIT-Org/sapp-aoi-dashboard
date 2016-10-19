@@ -30,15 +30,11 @@
 		}];
 
 	$(document).ready(function () {
-		if (jsonObject === undefined){
-          return;
-        } 
-
 		var data = []
 		var addIndex = 1;
 		var seriesNr = 1;
 		colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ]
-		for (b in jsonObject.BoardsUnderTest) {
+		/*for (b in jsonObject.BoardsUnderTest) {
 			
 			var seriesData = {
 				id: b,
@@ -105,7 +101,7 @@
 					addIndex++;
 				} 
 			}
-		}
+		}*/
 
 		var layout = {
 			hovermode:'closest',
@@ -271,7 +267,6 @@
 	    seriesBackup.forEach(function(j){
 	        var newData = [];
 
-	        //this.update({data: mySeries[mySeriesIndex]})
 	        var plotData = document.getElementById('chart2');
 	        plotData.data[mySeriesIndex].x = JSON.parse(JSON.stringify(j.x));
 	        plotData.data[mySeriesIndex].y = JSON.parse(JSON.stringify(j.y));
@@ -294,7 +289,6 @@
 	            } 
 	            index++;
 	        });
-	        var plotData = document.getElementById('chart2');
 	        plotData.data[mySeriesIndex].x = newX;
 	        plotData.data[mySeriesIndex].y = newY;
 	        plotData.data[mySeriesIndex].text = newText;
@@ -332,15 +326,13 @@
 				seriesData.y.push(e.data[b][0][i].y);
 				seriesData.text.push(e.data[b][0][i].text);
 			};
-			console.log(b);
 			mySeries[addIndex] = seriesData;
 			seriesBackup[addIndex] = (JSON.parse(JSON.stringify(seriesData)));
 			addIndex++;
 
 	    };
-
-		//dropdownComponentActionPlotly;
 		dropdownBoardActionPlotly();
+		dropdownComponentActionPlotly();
 	}
 
 

@@ -3,8 +3,7 @@
 	var jsonObject;
   var sidata;
 	var init = true;
-	var sseOn = true;
-  var mySeriesH = [];
+	var sseOn = false;
 
 //********************************************************************************************
 //This one is executed after all the other scripts when Page is Ready
@@ -21,7 +20,6 @@
 
 //*********************************************************************** Register I/O Handlers
 $(document).ready(function () {
-
     var chart = $('#chart').highcharts();
 
 		//****************************************Save Config Buttong
@@ -59,6 +57,7 @@ $(document).ready(function () {
 
     $('#Charts').off().on('change', function(){
         var selected = $(this).val();
+        console.log(selected);
         if (selected === "Plotly"){
             $('#chart2').find('.plot-container').show();
             $('#chart').find('.highcharts-container').hide();
@@ -103,14 +102,14 @@ $(document).ready(function () {
       $("#Boards").append($('<option>', {value: b,text: b}));
       $('.selectpicker').selectpicker('refresh');
 
-      /*var chart = $('#chart').highcharts();
+      var chart = $('#chart').highcharts();
       chart.addSeries({ 
             id: b,
             name: 'BoardsUnderTest '+b,
             showInLegend: false, 
             visible: false,
             data: []
-      });*/
+      });
 
     }
     
@@ -192,7 +191,9 @@ function updateChartData() {
       }, false);  
                   
       function stopWorker() { 
-            w.terminate();
-            w = undefined;
+        if (w != undefined) {
+          w.terminate();
+          w = undefined;
+        }
       }
 }

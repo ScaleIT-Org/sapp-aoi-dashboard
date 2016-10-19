@@ -1,3 +1,4 @@
+var mySeriesH = [];
 $(document).ready(function () {
     var chart = $('#chart').highcharts({
 		// exporting: {
@@ -27,7 +28,7 @@ $(document).ready(function () {
             width: null,
             height: 600,
             events : {
-            	load : function() {
+            	load : function() {/*
                         if (jsonObject === undefined){
                           return;
                         } 
@@ -90,8 +91,7 @@ $(document).ready(function () {
 									mySeriesH.push(seriesData);
 								} 
 							}
-						}
-
+						}*/
                 }
             }
         },
@@ -253,7 +253,7 @@ function dropdownBoardActionHighchart() {
     if(selected !== null) {
         selected.forEach(function(i) {
             var series = chart.get(i);
-            series.update({ showInLegend: true, visible: true});
+            (series != null) ? series.update({ showInLegend: true, visible: true}) : null;
         });
     }
     chart.redraw();
@@ -261,6 +261,7 @@ function dropdownBoardActionHighchart() {
 };
 
 function dropdownComponentActionHighchart() {
+    if (mySeriesH.length === 0){return;};
     var chart = $('#chart').highcharts();
     //chart.showLoading();
     //Show selected series
@@ -323,5 +324,6 @@ function updateChartDataHighchart(e) {
 
                         mySeriesH.push(answer[b][0]);
                   }
+                  dropdownBoardActionHighchart();
             }
 }
