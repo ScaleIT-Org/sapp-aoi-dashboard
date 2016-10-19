@@ -3,7 +3,7 @@
 	var jsonObject;
   var sidata;
 	var init = true;
-	var sseOn = false;
+	var sseOn = true;
 
 //********************************************************************************************
 //This one is executed after all the other scripts when Page is Ready
@@ -30,9 +30,9 @@ $(document).ready(function () {
 
 		//****************************************Stop SSE Buttong
 		document.getElementById("StopSSE").onclick = function () { 
-			sseOn = false;
-	        $(this).addClass('active');
-	       	$('#StartSSE').removeClass('active');
+			 sseOn = false;
+	     $(this).addClass('active');
+	     $('#StartSSE').removeClass('active');
 		};
 
 		//****************************************Stop SSE Buttong
@@ -40,6 +40,8 @@ $(document).ready(function () {
 			sseOn = true;
 			$(this).addClass('active');
 		    $('#StopSSE').removeClass('active');
+        es = new EventSource("http://localhost:3000/sse");
+        startSSEListeners();
 		};
 
 		//****************************************Boards Dropdown
@@ -57,7 +59,6 @@ $(document).ready(function () {
 
     $('#Charts').off().on('change', function(){
         var selected = $(this).val();
-        console.log(selected);
         if (selected === "Plotly"){
             $('#chart2').find('.plot-container').show();
             $('#chart').find('.highcharts-container').hide();
@@ -71,21 +72,26 @@ $(document).ready(function () {
 
 //*********************************************************************** Server Sent Events Listeners
   var es = new EventSource("http://localhost:3000/sse");
-  es.addEventListener("open",  function(event){
-  }, false);
+  startSSEListeners();
+  function startSSEListeners() {
+    es.addEventListener("open",  function(event){
+    }, false);
+    
+    es.addEventListener("message", function(event){
+      if (sseOn == true) {
+      jsonObject = JSON.parse(event.data).data;
+      sidata = JSON.parse(event.data).si;
+      console.log(jsonObject);
+      ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
+      setTimeout(updateMonitoringData(), 0 );
+      updateMetadata();
+    }
+    }, false);
+    
+    es.addEventListener("error",  function(event){
+    }, false);
+  }
   
-  es.addEventListener("message", function(event){
-  	if (sseOn == true) {
-		jsonObject = JSON.parse(event.data).data;
-    sidata = JSON.parse(event.data).si;
-		($('#chart').highcharts() !== undefined) ? updateChartData() : null;
-    setTimeout(updateMonitoringData(), 0 );
-    updateMetadata();
-	}
-  }, false);
-  
-  es.addEventListener("error",  function(event){
-  }, false);
 
 
 
