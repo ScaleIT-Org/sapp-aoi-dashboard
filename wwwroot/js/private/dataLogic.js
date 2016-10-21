@@ -9,13 +9,8 @@
 //This one is executed after all the other scripts when Page is Ready
 	$(window).bind('load', function(){
 		//Do initial ajax call
-		doAjax(); 
-    //Update the chart data
-    updateChartData();
-    //Initial Dropdown configuration
     initDropdowns();
-    //Crawl and show Metadata
-    updateMetadata();
+		doAjax(); 
 	});
 
 //*********************************************************************** Register I/O Handlers
@@ -59,7 +54,6 @@ $(document).ready(function () {
 		});
 
     $('#Charts').off().on('change', function(){
-        console.log("ssdas")
         var selected = $(this).val();
         if (selected === "Plotly"){
             $('#chart2').find('.plot-container').show();
@@ -148,6 +142,12 @@ function doAjax() {
         async: false,                     
         success: function(data) {
               jsonObject = data;
+              //Update the chart data
+              updateChartData();
+              //Initial Dropdown configuration
+              initDropdowns();
+              //Crawl and show Metadata
+              updateMetadata();
         }
   });
 }
