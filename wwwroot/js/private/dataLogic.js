@@ -20,6 +20,7 @@
 
 //*********************************************************************** Register I/O Handlers
 $(document).ready(function () {
+
     var chart = $('#chart').highcharts();
 
 		//****************************************Save Config Buttong
@@ -58,6 +59,7 @@ $(document).ready(function () {
 		});
 
     $('#Charts').off().on('change', function(){
+        console.log("ssdas")
         var selected = $(this).val();
         if (selected === "Plotly"){
             $('#chart2').find('.plot-container').show();
@@ -81,7 +83,6 @@ $(document).ready(function () {
       if (sseOn == true) {
       jsonObject = JSON.parse(event.data).data;
       sidata = JSON.parse(event.data).si;
-      console.log(jsonObject);
       ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
       setTimeout(updateMonitoringData(), 0 );
       updateMetadata();
@@ -98,7 +99,10 @@ $(document).ready(function () {
 //*********************************************************************** Helper Functions
   function initDropdowns(){
 
+    $('#Charts').selectpicker('val', 'Plotly');
+
     if (jsonObject === undefined){
+      $('.selectpicker').trigger('change');
       return;
     } 
 
@@ -118,8 +122,6 @@ $(document).ready(function () {
       });
 
     }
-    
-    $('#Charts').selectpicker('val', 'Plotly');
 
     //Default configuration
     //$('#Boards').selectpicker('selectAll');
