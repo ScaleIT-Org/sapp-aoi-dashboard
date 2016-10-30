@@ -10,7 +10,14 @@
 	$(window).bind('load', function(){
 		//Do initial ajax call
     initDropdowns();
-		doAjax(); 
+    if (jsonObject === undefined) {
+      doAjax();
+    } else {
+      //Update the chart data
+      updateChartData(); 
+      //Crawl and show Metadata
+      updateMetadata();
+    }
 	});
 
 //*********************************************************************** Register I/O Handlers
@@ -56,12 +63,19 @@ $(document).ready(function () {
     $('#Charts').off().on('change', function(){
         var selected = $(this).val();
         if (selected === "Plotly"){
-            $('#chart2').find('.plot-container').show();
             $('#chart').find('.highcharts-container').hide();
+            $('#chart2').find('.plot-container').show();
+            $('#chart3').find('.plot').hide();
         }
         if (selected === "Highcharts") {
           $('#chart').find('.highcharts-container').show();
           $('#chart2').find('.plot-container').hide();
+          $('#chart3').find('.plot').hide();
+        }
+        if (selected === "Plottable") {
+          $('#chart').find('.highcharts-container').hide();
+          $('#chart2').find('.plot-container').hide();
+          $('#chart3').find('.plot').show();
         }
     });
 	});
@@ -93,7 +107,7 @@ $(document).ready(function () {
 //*********************************************************************** Helper Functions
   function initDropdowns(){
 
-    $('#Charts').selectpicker('val', 'Plotly');
+    $('#Charts').selectpicker('val', 'Plottable');
 
     if (jsonObject === undefined){
       $('.selectpicker').trigger('change');
@@ -193,9 +207,9 @@ function updateChartData() {
       w.addEventListener('message', function(e) {
           updateChartDataHighchart(e);
           updateChartDataPlotly(e);
-
+          updateChartDataPlottable(e);
             
-            stopWorker();
+          stopWorker();
       }, false);  
                   
       function stopWorker() { 
