@@ -66,17 +66,17 @@ $(document).ready(function () {
         if (selected === "Plotly"){
             $('#chart').find('.highcharts-container').hide();
             $('#chart2').find('.plot-container').show();
-            $('#chart3').find('.plot').hide();
+            $('#chart3').find('.hideThis').hide();
         }
         if (selected === "Highcharts") {
           $('#chart').find('.highcharts-container').show();
           $('#chart2').find('.plot-container').hide();
-          $('#chart3').find('.plot').hide();
+          $('#chart3').find('.hideThis').hide();
         }
         if (selected === "Plottable") {
           $('#chart').find('.highcharts-container').hide();
           $('#chart2').find('.plot-container').hide();
-          $('#chart3').find('.plot').show();
+          $('#chart3').find('.hideThis').show();
         }
     });
 	});
