@@ -51,13 +51,14 @@ $(document).ready(function () {
 		$('#Boards').off().on('change', function(){
       setTimeout( dropdownBoardActionHighchart(), 0 ); //SetTimeout(X, 0) = Async call
       setTimeout( dropdownBoardActionPlotly(), 0 );
-        
+      setTimeout( dropdownBoardActionPlottable(), 0 );
 		});
 
 		//****************************************IC/C Selection
 		$('#Components').off().on('change', function(){
       setTimeout( dropdownComponentActionHighchart(), 0 );//SetTimeout(X, 0) = Async call
       setTimeout( dropdownComponentActionPlotly(), 0 );
+      setTimeout( dropdownComponentActionPlottable(), 0 );
 		});
 
     $('#Charts').off().on('change', function(){

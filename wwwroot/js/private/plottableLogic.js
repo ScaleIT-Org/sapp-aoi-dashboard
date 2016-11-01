@@ -91,8 +91,47 @@ $(document).ready(function() {
 	});
 });
 
+function dropdownBoardActionPlottable() {
+	dropdownAction();
+}
+
+function dropdownComponentActionPlottable() {
+	dropdownAction();
+}
+
+function dropdownAction() {
+	if(tempData === undefined) {
+		return;
+	}
+	var colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200'];
+	var cIndex = 0;
+	var data = [{"board": "", "label": "Reference" ,"x": 0, "y": 0, "radius": 13, "color": "#000000"}];
+
+	var selectedBoards = $('#Boards').val();
+    var selectedComponents = $('#Components').val();
+
+	for(b in tempData.data) {
+		for (sb in selectedBoards) {
+			if(b.startsWith(selectedBoards[sb])) {
+				for(i in tempData.data[b][0]) {
+					for (sc in selectedComponents) {
+						if(tempData.data[b][0][i].text.startsWith(selectedComponents[sc])) {
+							data.push({"board": b, "label": tempData.data[b][0][i].text ,"x": tempData.data[b][0][i].x, "y": tempData.data[b][0][i].y, "radius": 13, "color": colors[cIndex]});
+						}
+					}
+				};
+			}
+		}
+		cIndex++;
+	}
+
+	dataset.data(data);
+}
+
+var tempData;
+var dataset;
 function updateChartDataPlottable(e) {
-	//console.log(e.data);
+	tempData = e;
 	var colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200'];
 	var cIndex = 0;
 	var data = [{"board": "", "label": "Reference" ,"x": 0, "y": 0, "radius": 13, "color": "#000000"}];
@@ -103,9 +142,10 @@ function updateChartDataPlottable(e) {
 		};
 		cIndex++;
 	}
-
-
-	plot.addDataset(new Plottable.Dataset(data));
+	dataset = new Plottable.Dataset(data)
+	plot.addDataset(dataset);
+	dataset.data(data);
+	dropdownBoardActionPlottable();
 	$('#chart3').attr('height', 600);
 	$('#chart3').attr('width', "95%");
 	$('#chart3').attr('style', "display: block; margin: auto; overflow: visible;");
