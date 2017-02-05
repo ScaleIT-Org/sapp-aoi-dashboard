@@ -34,6 +34,7 @@ $(document).ready(function () {
 		//****************************************Stop SSE Buttong
 		document.getElementById("StopSSE").onclick = function () { 
 			 sseOn = false;
+       es.close();
 	     $(this).addClass('active');
 	     $('#StartSSE').removeClass('active');
 		};
@@ -43,7 +44,7 @@ $(document).ready(function () {
 			sseOn = true;
 			$(this).addClass('active');
 		    $('#StopSSE').removeClass('active');
-        es = new EventSource("http://localhost:3000/sse");
+        es = new EventSource($("#sseconfig").val());
         startSSEListeners();
 		};
 
@@ -88,30 +89,27 @@ $(document).ready(function () {
           $('#chart4').show();
         }
     });
-	});
-
-//*********************************************************************** Server Sent Events Listeners
-  var es = new EventSource("http://localhost:3000/sse");
-  startSSEListeners();
-  function startSSEListeners() {
-    es.addEventListener("open",  function(event){
-    }, false);
-    
-    es.addEventListener("message", function(event){
-      if (sseOn == true) {
-      jsonObject = JSON.parse(event.data).data;
-      sidata = JSON.parse(event.data).si;
-      ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
-      setTimeout(updateMonitoringData(), 0 );
-      updateMetadata();
+    //*********************************************************************** Server Sent Events Listeners
+    var es = new EventSource($("#sseconfig").val());
+    startSSEListeners();
+    function startSSEListeners() {
+      es.addEventListener("open",  function(event){
+      }, false);
+      
+      es.addEventListener("message", function(event){
+        if (sseOn == true) {
+        jsonObject = JSON.parse(event.data).data;
+        sidata = JSON.parse(event.data).si;
+        ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
+        setTimeout(updateMonitoringData(), 0 );
+        updateMetadata();
+      }
+      }, false);
+      
+      es.addEventListener("error",  function(event){
+      }, false);
     }
-    }, false);
-    
-    es.addEventListener("error",  function(event){
-    }, false);
-  }
-  
-
+	});
 
 
 //*********************************************************************** Helper Functions
