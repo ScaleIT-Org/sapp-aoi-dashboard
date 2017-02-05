@@ -46,7 +46,7 @@ $(document).ready(function() {
         [yAxis, cg],
         [null,  xAxis]
       	]);
-  	chart.renderTo("#plottableSVG");
+  	chart.renderTo("#chart3");
 
   	//Tooltip
 
@@ -89,6 +89,11 @@ $(document).ready(function() {
 	window.addEventListener("resize", function() {
 	  plot.redraw();
 	});
+
+	$('#chart3').attr('height', 600);
+	$('#chart3').attr('width', "95%");
+	$('#chart3').attr('style', "display: block; margin: auto; overflow: visible;");
+
 });
 
 function dropdownBoardActionPlottable() {
@@ -126,11 +131,13 @@ function dropdownAction() {
 	}
 
 	dataset.data(data);
+	plot.redraw();
 }
 
 var tempData;
 var dataset;
 function updateChartDataPlottable(e) {
+	//console.log(e.data);
 	tempData = e;
 	var colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200'];
 	var cIndex = 0;
@@ -146,8 +153,5 @@ function updateChartDataPlottable(e) {
 	plot.addDataset(dataset);
 	dataset.data(data);
 	dropdownBoardActionPlottable();
-	$('#plottableSVG').attr('height', 600);
-	$('#plottableSVG').attr('width', "95%");
-	$('#plottableSVG').attr('style', "display: block; margin: auto; overflow: visible;");
 	plot.redraw();
 }

@@ -63,20 +63,29 @@ $(document).ready(function () {
 
     $('#Charts').off().on('change', function(){
         var selected = $(this).val();
-        if (selected === "Plotly"){
-            $('#chart').find('.highcharts-container').hide();
-            $('#chart2').find('.plot-container').show();
-            $('#chart3').find('.hideThis').hide();
-        }
         if (selected === "Highcharts") {
-          $('#chart').find('.highcharts-container').show();
-          $('#chart2').find('.plot-container').hide();
-          $('#chart3').find('.hideThis').hide();
+          $('#chart').show();
+          $('#chart2').hide();
+          $('#chart3').hide();
+          $('#chart4').hide();
+        }
+        if (selected === "Plotly"){
+          $('#chart').hide();
+          $('#chart2').show();
+          $('#chart3').hide();
+          $('#chart4').hide();
         }
         if (selected === "Plottable") {
-          $('#chart').find('.highcharts-container').hide();
-          $('#chart2').find('.plot-container').hide();
-          $('#chart3').find('.hideThis').show();
+          $('#chart').hide();
+          $('#chart2').hide();
+          $('#chart3').show();
+          $('#chart4').hide();
+        }
+        if (selected === "jsonVis") {
+          $('#chart').hide();
+          $('#chart2').hide();
+          $('#chart3').hide();
+          $('#chart4').show();
         }
     });
 	});
@@ -192,7 +201,12 @@ function updateChartData() {
                   try {
                     w = new Worker("./js/private/task.js");
                   }catch(err){
-                        console.log("task.js cannot be accessed from origin 'null'")
+                        console.log("task.js cannot be accessed from origin 'null'");
+                        var e = {data: localWorker({data: jsonObject})};
+                        updateChartDataHighchart(e);
+                        updateChartDataPlotly(e);
+                        updateChartDataPlottable(e);
+                        updateChartDataJsonVis(e);
                         return;
                   }
 
@@ -209,6 +223,7 @@ function updateChartData() {
           updateChartDataHighchart(e);
           updateChartDataPlotly(e);
           updateChartDataPlottable(e);
+          updateChartDataJsonVis(e);
             
           stopWorker();
       }, false);  
@@ -219,4 +234,59 @@ function updateChartData() {
           w = undefined;
         }
       }
+}
+function localWorker(e) {
+  var jsonObject = e.data;
+  var result = {}
+  for (b in jsonObject.BoardsUnderTest) {
+    var seriesData = [];
+    var components = [];
+    var integratedCircuits = [];
+              
+    var Board = jsonObject.BoardsUnderTest[b].ComponentsUnderTest;
+    for (i in Board)
+    { 
+      if (i.startsWith('C')) {
+        //COMPONENT
+        var x = null, y = null, label = "";
+        for (j in Board[i].TestFeature)
+        {
+          if(x === null) {
+            x = parseInt(Board[i].TestFeature[j].Value);
+          } else {
+            y = parseInt(Board[i].TestFeature[j].Value);
+          }
+          label = i;
+        }
+      seriesData.push({x: x, y: y, text: label});
+      components.push({x: x, y: y, text: label});
+      }
+      if(i.startsWith('IC') ){
+        //INTEGRATED CIRCUIT
+
+        var x = null, y = null, label = "";
+        for (j in Board[i].TestFeature)
+        {
+          var done = false;
+          if(x === null) {
+            x = parseInt(Board[i].TestFeature[j].Value);
+          } else {
+            y = parseInt(Board[i].TestFeature[j].Value);
+            done = true;
+          }
+          label = i;
+          if(done === true) {
+            seriesData.push({x: x, y: y, text: label});
+            integratedCircuits.push({x: x, y: y, text: label});
+            x = null;
+            y = null;
+            done = false;
+          }
+        }
+
+      } 
+    }
+    result[b] = [seriesData, components, integratedCircuits]; 
+  }
+  return result;
 }
