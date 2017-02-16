@@ -1,9 +1,10 @@
 //************************************************************************* Globale Variablen
 	var ajaxUrl = "http://localhost:3000/Get/";
 	var jsonObject;
-  var sidata;
+  	var sidata;
 	var init = true;
-	var sseOn = true;
+	var sseOn = false;
+	var socket;
 
 //********************************************************************************************
 //This one is executed after all the other scripts when Page is Ready
@@ -25,42 +26,67 @@ $(document).ready(function () {
 
     var chart = $('#chart').highcharts();
 
-		//****************************************Save Config Buttong
-		document.getElementById("SaveConfig").onclick = function () { 
-			ajaxUrl = $("#ajaxconfig").val(); 
-			doAjax();
-		};
+	//****************************************Save Config Buttong
+	document.getElementById("SaveConfig").onclick = function () { 
+		ajaxUrl = $("#ajaxconfig").val(); 
+		doAjax();
+	};
 
-		//****************************************Stop SSE Buttong
-		document.getElementById("StopSSE").onclick = function () { 
-			 sseOn = false;
-       es.close();
+	//****************************************Stop SSE Buttong
+	document.getElementById("StopSSE").onclick = function () { 
+		 sseOn = false;
+   es.close();
+     $(this).addClass('active');
+     $('#StartSSE').removeClass('active');
+	};
+
+	//****************************************Start SSE Buttong
+	document.getElementById("StartSSE").onclick = function () { 
+		sseOn = true;
+		$(this).addClass('active');
+	    $('#StopSSE').removeClass('active');
+    es = new EventSource($("#sseconfig").val());
+    startSSEListeners();
+	};
+
+	//****************************************Stop WebSocket Buttong
+	document.getElementById("StopWebSocket").onclick = function () {
 	     $(this).addClass('active');
-	     $('#StartSSE').removeClass('active');
-		};
+	     $('#StartWebSocket').removeClass('active');
+	     socket.disconnect();
+	};
 
-		//****************************************Stop SSE Buttong
-		document.getElementById("StartSSE").onclick = function () { 
-			sseOn = true;
+	//****************************************Start WebSocket Buttong
+	document.getElementById("StartWebSocket").onclick = function () { 
+		if ('WebSocket' in window){
+	    /* WebSocket is supported. You can proceed with your code*/
 			$(this).addClass('active');
-		    $('#StopSSE').removeClass('active');
-        es = new EventSource($("#sseconfig").val());
-        startSSEListeners();
-		};
+	    	$('#StopWebSocket').removeClass('active');
+			 socket = io($("#wsconfig").val());
+			 socket.on('json', function(msg){
+			    jsonObject = msg;
+			    ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
+			    updateMetadata();
+			  });
+	    } else {
+	   	/*WebSockets are not supported. Try a fallback method like long-polling etc*/
+	   	alert("WebSockets are not supported by your Broser")
+		} 
+	};
 
-		//****************************************Boards Dropdown
-		$('#Boards').off().on('change', function(){
-      setTimeout( dropdownBoardActionHighchart(), 0 ); //SetTimeout(X, 0) = Async call
-      setTimeout( dropdownBoardActionPlotly(), 0 );
-      setTimeout( dropdownBoardActionPlottable(), 0 );
-		});
+	//****************************************Boards Dropdown
+	$('#Boards').off().on('change', function(){
+	  setTimeout( dropdownBoardActionHighchart(), 0 ); //SetTimeout(X, 0) = Async call
+	  setTimeout( dropdownBoardActionPlotly(), 0 );
+	  setTimeout( dropdownBoardActionPlottable(), 0 );
+	});
 
-		//****************************************IC/C Selection
-		$('#Components').off().on('change', function(){
-      setTimeout( dropdownComponentActionHighchart(), 0 );//SetTimeout(X, 0) = Async call
-      setTimeout( dropdownComponentActionPlotly(), 0 );
-      setTimeout( dropdownComponentActionPlottable(), 0 );
-		});
+	//****************************************IC/C Selection
+	$('#Components').off().on('change', function(){
+	  setTimeout( dropdownComponentActionHighchart(), 0 );//SetTimeout(X, 0) = Async call
+	  setTimeout( dropdownComponentActionPlotly(), 0 );
+	  setTimeout( dropdownComponentActionPlottable(), 0 );
+	});
 
     $('#Charts').off().on('change', function(){
         var selected = $(this).val();

@@ -4,12 +4,14 @@
  */
 
 var express = require('express');
+var http = require('http');
 var routes = require('./routes');
 var path = require('path');
 var bodyParser = require('body-parser');
 var SSE = require('sse');
 var url = require("url");
 var fs = require('fs');
+//var WebSocketServer = require('websocket').server;
 var graphqlHTTP = require('express-graphql');
 var buildSchema  = require('graphql');
 var jsonToGraphql = require("json-to-graphql");
@@ -33,13 +35,17 @@ app.use(express.static(path.join(__dirname, '../wwwroot')));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.engine('html', require('ejs').renderFile);
- 
+
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+server.listen(app.get('port'), function () {
+	    console.log('Express server listening on port ' + app.get('port'));
+});
 
-//app.get('/', routes.index);
 
 app.get('/', function (req, res)
 {
@@ -104,6 +110,57 @@ app.get('/sse', function (req, res) {
     });
 
 });
+
+//********************WebSocket
+//Check every 5 seconds if json file has changed and emit in case of change.
+io.set('origins', '*:*');
+io.on('connection', function(socket){
+  console.log('WebSocket client connected');
+	var data = {};
+	setInterval(function() { 
+		if(JSON.stringify(data) == JSON.stringify(JSON.parse(fs.readFileSync(testJsonPath, 'utf8')))) {
+			data = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
+		} {
+			data = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
+			io.emit('json', data);
+		}
+	}, 5000);
+	socket.on('disconnect', function(){
+    	console.log('WebSocket client disconnected');
+  });
+});
+
+
+
+
+/*wsServer = new WebSocketServer({
+    httpServer: server,
+    autoAcceptConnections: false
+});
+wsServer.on('connection', function(ws) {
+	console.log('connected');
+    ws.on('message', function(message) {
+        console.log('received: %s', message);
+    });
+    ws.send('something');
+});
+wsServer.on('request', function(request) {
+    var connection = request.accept('echo-protocol', request.origin);
+    console.log((new Date()) + ' Connection accepted.');
+    connection.on('message', function(message) {
+        if (message.type === 'utf8') {
+            console.log('Received Message: ' + message.utf8Data);
+            connection.sendUTF(message.utf8Data);
+        }
+        else if (message.type === 'binary') {
+            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+            connection.sendBytes(message.binaryData);
+        }
+    });
+    connection.on('close', function(reasonCode, description) {
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+    });
+});*/
 
 //********************System Information
 
