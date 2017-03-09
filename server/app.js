@@ -5,6 +5,7 @@
 
 var express = require('express');
 var http = require('http');
+var http2 = require('spdy');
 var routes = require('./routes');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -40,7 +41,13 @@ app.engine('html', require('ejs').renderFile);
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
-var server = http.createServer(app);
+
+var options = {
+  key: fs.readFileSync('./server.key'),
+  cert: fs.readFileSync('./server.crt')
+}
+
+var server = http2.createServer(options, app);
 var io = require('socket.io')(server);
 server.listen(app.get('port'), function () {
 	    console.log('Express server listening on port ' + app.get('port'));
