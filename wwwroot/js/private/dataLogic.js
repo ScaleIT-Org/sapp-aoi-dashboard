@@ -13,6 +13,7 @@
     initDropdowns();
     if (jsonObject === undefined) {
       doAjax();
+      initDropdowns();
     } else {
       //Update the chart data
       updateChartData(); 
@@ -192,8 +193,6 @@ function doAjax() {
               jsonObject = data;
               //Update the chart data
               updateChartData();
-              //Initial Dropdown configuration
-              initDropdowns();
               //Crawl and show Metadata
               updateMetadata();
         }

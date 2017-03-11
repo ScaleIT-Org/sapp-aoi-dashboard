@@ -270,7 +270,6 @@ function dropdownComponentActionHighchart() {
     $(chart.series).each(function(){
         var newData = [];
         if(this.name !== "Reference"){
-
             this.update({data: mySeriesH[mySeriesHIndex]});
             mySeriesH[mySeriesHIndex].forEach(function(i) {
                 if(selected !== null && i.text.startsWith(selected[0])){

@@ -48,6 +48,10 @@
 		<link rel="stylesheet" href="css/bootstrap-select.min.css">
 		<link rel="stylesheet" href="css/plottable.css">
 		<link rel="stylesheet" href="css/jsonld-vis.css">
+				<!-- ScaleIT Sidebar from https://blackrockdigital.github.io/startbootstrap-simple-sidebar/ -->
+		<link rel="stylesheet" href="css/simple-sidebar.css">
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/sidebarstyle.css">
 
 		<!-- *********************************** Selfmade JS Magic ***************************************************-->
 		<!-- Scripts and Logic by Nico Kuhn -->
@@ -69,102 +73,158 @@
 
 	<!--************************************************* HTML - BODY ***********************************************-->
 	<body onload="">
+		<div id="wrapper" class="">
+		<!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                    <img alt="ScaleIT SICK AOI Chain" id="scaleit-bar-logo" src="images/scaleit_logo_small.png">
+                    <span>ScaleIT SICK AOI Chain<span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="show_vis_app()"><i class="fa fa-bar-chart" aria-hidden="true"></i> Data</a>
+                </li>
+                <li>
+                    <a href="#" onclick="show_data_app_1()"><span><i class="fa fa-microchip" aria-hidden="true"></i> M1</span></a>
+                </li>
+                <li>
+                    <a href="#" onclick="show_data_app_2()"><i class="fa fa-microchip" aria-hidden="true"></i> M2<span style="color:red"> !</span></a>
+                </li>
+                <li>
+                    <a href="#" onclick="show_notifications_app()"><i class="fa fa-bell-o" aria-hidden="true"></i><span style="color:red"> 1</span></a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
 
-		<!-- ###############Tab definitions ###################-->
-		<ul class="nav nav-pills nav-justified">
-		  <li class="active"><a data-toggle="tab" href="#visualization">Visualization</a></li>
-		  <li><a data-toggle="tab" href="#config">Configuration</a></li>
-		  <li><a data-toggle="tab" href="#docu">Documentation</a></li>
-		  <li><a data-toggle="tab" href="#mon">Monitoring</a></li>
-		</ul>
-		
-		<div class="tab-content">
-		<!-- ############### TAB-CONTENT: Visualization  ###################-->
-			<div id="visualization" class="tab-pane fade in active">	
-				<fieldset id="core-dashboard">
-					<legend>SICK AOI Data System</legend>
-					<div class="form-group">
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+	        <div id="data-app1"> 
+	        	<h1><img style="height: 3em;" src="images/Logo_SICK_AG_2009.svg.png"> AOI Data Systems</h1>
+	        	<h2>AOI Maschine 1</h2>
+	        	<h3 class="status">Status:</h3>
+	        	<p class="status status-text-ok">OK</p>
+	        </div>
+	        <div id="data-app2"> 
+	        	<h1><img style="height: 3em;" src="images/Logo_SICK_AG_2009.svg.png"> AOI Data Systems</h1>
+	        	<h2>AOI Maschine 2</h2>
+	        	<h3 class="status">Status:</h3>
+	        	<p class="status status-text-warning">Warnung - Material fehlt</p>
+	        </div>
+	        <div id="notification-app"> 
+	        	<h1><img style="height: 3em;" src="images/Logo_SICK_AG_2009.svg.png"> AOI Data Systems</h1>
+	        	<h2>Meldungen</h2>
+	        	<ul>
+	        		<li>AOI Maschine 2: <span style="font-size: 1em" class="status-text-warning">Warnung - Material fehlt</span></li>
+	        	</ul>
+	        </div>
+            <div id="content" class="container-fluid">
+               <div class="row">
+                    <div class="col-lg-12">                   
+						<!-- ###############Tab definitions ###################-->
+						<ul class="nav nav-pills nav-justified">
+						  <li class="active"><a data-toggle="tab" href="#visualization">Visualization</a></li>
+						  <li><a data-toggle="tab" href="#config">Configuration</a></li>
+						  <li><a data-toggle="tab" href="#docu">Documentation</a></li>
+						  <li><a data-toggle="tab" href="#mon">Monitoring</a></li>
+						</ul>
+						
+						<div class="tab-content">
+						<!-- ############### TAB-CONTENT: Visualization  ###################-->
+							<div id="visualization" class="tab-pane fade in active">	
+								<fieldset id="core-dashboard">
+									<legend><img style="height: 3em;" src="images/Logo_SICK_AG_2009.svg.png"> AOI Data Systems</legend>
+									<div class="form-group">
 
-						<select class="selectpicker" data-width="auto" id="Boards" multiple data-live-search="true" title="BoardsUnderTest">
-						</select>
+										<select class="selectpicker" data-width="auto" id="Boards" multiple data-live-search="true" title="BoardsUnderTest">
+										</select>
 
-						<select class="selectpicker" data-width="fit" id="Components" multiple data-live-search="true" title="ComponentsUnderTest">
-						  <optgroup id="C" label="Components">
-						  <option value="C"> Condensator - C0603</option>
-						  <option value="IC"> Integrated Circuit - IC1</option>
-						  </optgroup>
-						</select>
+										<select class="selectpicker" data-width="fit" id="Components" multiple data-live-search="true" title="ComponentsUnderTest">
+										  <optgroup id="C" label="Components">
+										  <option value="C"> Condensator - C0603</option>
+										  <option value="IC"> Integrated Circuit - IC1</option>
+										  </optgroup>
+										</select>
 
-						<select class="selectpicker pull-right" data-width="fit" id="Charts" data-live-search="true" title="Chart Selection">
-						  <option value="Highcharts"> Highcharts</option>
-						  <option value="Plotly"> Plotly</option>
-						  <option value="Plottable"> Plottable</option>
-						  <option value="jsonVis"> jsonVis </option>
-						  </optgroup>
-						</select>
+										<select class="selectpicker pull-right" data-width="fit" id="Charts" data-live-search="true" title="Chart Selection">
+										  <option value="Highcharts"> Highcharts</option>
+										  <option value="Plotly"> Plotly</option>
+										  <option value="Plottable"> Plottable</option>
+										  <option value="jsonVis"> jsonVis </option>
+										  </optgroup>
+										</select>
 
+									</div>
+					                <div id="Charts">
+					                	<ul id="chart"></ul>
+					                	<ul id="chart2"></ul>
+					                	<svg id="chart3"></svg>
+					                	<ul id="chart4" style="overflow: scroll;"></ul>
+					                </div>
+								</fieldset>
+								<fieldset>
+									<legend>MetaData</legend>
+									<ul id="meta"></ul>
+								</fieldset>
+							</div>
+							<!-- ############### TAB-CONTENT: Configuration  ###################-->
+							<div id="config" class="tab-pane fade">
+								<!--Configuration -->
+								<h1>Configuration</h1>
+								V 0.0.1 SICK AOI Data Visualizer <br><br>
+
+								<div class="form-group">
+								  <label for="sseconfig">SSE Endpoint:</label>
+								  <input type="text" class="form-control" id="sseconfig" value="http://localhost:3000/sse">
+								  <button id="StopSSE" type="button" class="btn btn-default active"><b>Stop SSE</b></button>
+								  <button id="StartSSE" type="button" class="btn btn-default"><b>Start SSE</b></button>
+								</div>
+								<div class="form-group">
+								  <label for="ajaxconfig">AJAX Endpoint:</label>
+								  <input type="text" class="form-control" id="ajaxconfig" value="http://localhost:3000/Get" >
+								  <button id="SaveConfig" type="button" class="btn btn-default"><b>Execute Ajax</b></button>
+								</div>
+								<div class="form-group">
+								  <label for="wsconfig">WebSocket:</label>
+								  <input type="text" class="form-control" id="wsconfig" value="http://localhost:3000" >
+								  <button id="StopWebSocket" type="button" class="btn btn-default active"><b>Stop WebSocket</b></button>
+								  <button id="StartWebSocket" type="button" class="btn btn-default "><b>Start WebSocket</b></button>
+								</div>
+							</div>
+							<!-- ############### TAB-CONTENT: Documentation  ###################-->
+							<div id="docu" class="tab-pane fade">
+								<div class="form-group">
+								  <label for="markdownconfig">Execute Markdown AJAX:</label>
+								  <input type="text" class="form-control" id="markdownconfig" value="http://localhost:3000/md/" >
+								  <button id="SaveMDConfig" type="button" class="btn btn-default"><b>Execute Ajax</b></button>
+								</div>
+								<!--Documentation -->
+								<ul id="mdhtml"></ul>
+							</div>
+							<!-- ############### TAB-CONTENT: Monitoring  ###################-->
+							<div id="mon" class="tab-pane fade">
+								<!--Monitoring -->
+								    <table>
+								      <tr>
+								        <th><ul id="cpu"></ul></th>
+								        <th><ul id="mem"></ul></th>
+								      </tr>
+								    </table>
+							</div>
+						</div>
 					</div>
-	                <div id="Charts">
-	                	<ul id="chart"></ul>
-	                	<ul id="chart2"></ul>
-	                	<svg id="chart3"></svg>
-	                	<ul id="chart4"></ul>
-	                </div>
-				</fieldset>
-				<fieldset>
-					<legend>MetaData</legend>
-					<ul id="meta"></ul>
-				</fieldset>
-			</div>
-			<!-- ############### TAB-CONTENT: Configuration  ###################-->
-			<div id="config" class="tab-pane fade">
-				<!--Configuration -->
-				<h1>Configuration</h1>
-				V 0.0.1 SICK AOI Data Visualizer <br><br>
-
-				<div class="form-group">
-				  <label for="sseconfig">SSE Endpoint:</label>
-				  <input type="text" class="form-control" id="sseconfig" value="http://localhost:3000/sse">
-				  <button id="StopSSE" type="button" class="btn btn-default active"><b>Stop SSE</b></button>
-				  <button id="StartSSE" type="button" class="btn btn-default"><b>Start SSE</b></button>
-				</div>
-				<div class="form-group">
-				  <label for="ajaxconfig">AJAX Endpoint:</label>
-				  <input type="text" class="form-control" id="ajaxconfig" value="http://localhost:3000/Get" >
-				  <button id="SaveConfig" type="button" class="btn btn-default"><b>Execute Ajax</b></button>
-				</div>
-				<div class="form-group">
-				  <label for="wsconfig">WebSocket:</label>
-				  <input type="text" class="form-control" id="wsconfig" value="http://localhost:3000" >
-				  <button id="StopWebSocket" type="button" class="btn btn-default active"><b>Stop WebSocket</b></button>
-				  <button id="StartWebSocket" type="button" class="btn btn-default "><b>Start WebSocket</b></button>
-				</div>
-			</div>
-			<!-- ############### TAB-CONTENT: Documentation  ###################-->
-			<div id="docu" class="tab-pane fade">
-				<div class="form-group">
-				  <label for="markdownconfig">Execute Markdown AJAX:</label>
-				  <input type="text" class="form-control" id="markdownconfig" value="http://localhost:3000/md/" >
-				  <button id="SaveMDConfig" type="button" class="btn btn-default"><b>Execute Ajax</b></button>
-				</div>
-				<!--Documentation -->
-				<ul id="mdhtml"></ul>
-			</div>
-			<!-- ############### TAB-CONTENT: Monitoring  ###################-->
-			<div id="mon" class="tab-pane fade">
-				<!--Monitoring -->
-				    <table>
-				      <tr>
-				        <th><ul id="cpu"></ul></th>
-				        <th><ul id="mem"></ul></th>
-				      </tr>
-				    </table>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
 	</body>	
 
 	<!--************************************** Hide script *******************************************************-->
     <script type="text/javascript">
+    	show_vis_app();
 	    $(document).ready(function () {
 	        var frameable = false;
 	        if(frameable){
@@ -172,6 +232,32 @@
 	            $('.nav').hide();
 	        }
 	    });
+
+	    function simulate_apps(a,b,c,d){
+	    	document.getElementById('content').style.display = a;
+	    	document.getElementById('data-app1').style.display = b;
+	    	document.getElementById('data-app2').style.display = c;
+	    	document.getElementById('notification-app').style.display = d;
+	    	
+	    }
+
+	    function show_vis_app(){
+	    	simulate_apps("inherit", "none", "none", "none")
+	    }
+
+	    function show_data_app_1(){
+	    	simulate_apps("none", "inherit", "none", "none")
+	    }
+
+	    function show_data_app_2(){
+	    	simulate_apps("none", "none", "inherit", "none")
+	    }
+
+	    function show_notifications_app(){
+	    	simulate_apps("none", "none", "none", "inherit")
+	    }
+
+
     </script>
 
 </html>
