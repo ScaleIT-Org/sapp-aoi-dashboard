@@ -1,3 +1,4 @@
+var mySeriesH = [];
 $(document).ready(function () {
     var chart = $('#chart').highcharts({
 		// exporting: {
@@ -27,13 +28,14 @@ $(document).ready(function () {
             width: null,
             height: 600,
             events : {
-            	load : function() {
+            	load : function() {/*
+                        if (jsonObject === undefined){
+                          return;
+                        } 
 						var seriesNr = 1;
 						var chart = $('#chart').highcharts();
+
 						for (b in jsonObject.BoardsUnderTest) {
-							// Add options to Bootstrap-Select 
-							$("#Boards").append($('<option>', {value: b,text: b}));
-							$('.selectpicker').selectpicker('refresh');
 							
 							var seriesData = [];
 							chart.addSeries({ 
@@ -89,8 +91,7 @@ $(document).ready(function () {
 									mySeries.push(seriesData);
 								} 
 							}
-						}
-
+						}*/
                 }
             }
         },
@@ -236,3 +237,93 @@ $(document).ready(function () {
         }]
     });
 });
+
+
+
+
+function dropdownBoardActionHighchart() {
+
+    var chart = $('#chart').highcharts();
+    //Hide all series 
+    $(chart.series).each(function(){
+        this.update({ showInLegend: false, visible: false});
+    });
+
+    //Show selected series
+    var selected = $('#Boards').val();
+    if(selected !== null) {
+        selected.forEach(function(i) {
+            var series = chart.get(i);
+            (series != null) ? series.update({ showInLegend: true, visible: true}) : null;
+        });
+    }
+    chart.redraw();
+
+};
+
+function dropdownComponentActionHighchart() {
+    if (mySeriesH.length === 0){return;};
+    var chart = $('#chart').highcharts();
+    //chart.showLoading();
+    //Show selected series
+    var selected = $('#Components').val();
+    var mySeriesHIndex = 0;
+    $(chart.series).each(function(){
+        var newData = [];
+        if(this.name !== "Reference"){
+            this.update({data: mySeriesH[mySeriesHIndex]});
+            mySeriesH[mySeriesHIndex].forEach(function(i) {
+                if(selected !== null && i.text.startsWith(selected[0])){
+                    newData.push({x: i.x, y: i.y, text: i.text});
+                }
+            });
+            mySeriesHIndex++;
+        }
+        (selected !== null && selected.length < 2)? this.update({data: newData}) : null;
+        //In this case newData is empty
+        (selected == null)? this.update({data: newData}) : null;
+    });
+    chart.redraw();
+    //chart.hideLoading();
+}
+
+function updateChartDataHighchart(e) {
+    var chart = $('#chart').highcharts();
+            if (chart !== undefined) {
+                  mySeriesH = [];
+                  var answer = e.data;
+                  //Update Dropdown Menue
+                  for (b in jsonObject.BoardsUnderTest) {
+                        if (chart !== undefined && !chart.get(b)) {
+                              //Create new Series
+                              $("#Boards").append($('<option>', {value: b,text: b}));
+                              //Set New Entry to Active
+                              //$("#Boards").selectpicker('val', ($("#Boards").selectpicker('val') == null)? [b] : $("#Boards").selectpicker('val').concat([b]));
+
+                              $('.selectpicker').selectpicker('refresh');
+
+                              chart.addSeries({ 
+                                    id: b,
+                                    name: 'BoardsUnderTest '+b,
+                                    showInLegend: false, 
+                                    visible: false,
+                                    data: []
+                              });
+                        }
+                  }
+
+                  //Update Chart Series
+                  for (b in answer) {
+                        var series = chart.get(b);
+                        var selected = $('#Components').val();
+
+                        (selected !== null && selected.length == 2)? series.setData(answer[b][0]) : null;
+                        (selected !== null && selected.length == 1 && selected[0] == "C")? series.setData(answer[b][1]) : null ;
+                        (selected !== null && selected.length == 1 && selected[0] == "IC")? series.setData(answer[b][2]) :  null;
+                        (selected == null)? series.setData([]) : null;
+
+                        mySeriesH.push(answer[b][0]);
+                  }
+                  dropdownBoardActionHighchart();
+            }
+}

@@ -1,4 +1,5 @@
 {
+  
   "OperatorName": "",
   "PanelUID": "382758",
   "Layer": "B",
@@ -14,7 +15,7 @@
   "BoardsPassedCount": 0,
   "BoardsFailedCount": 0,
   "BoardsUnderTest": {
-    "382758X": {
+    "3827581": {
       "ComponentsUnderTest": {
         "C1-1": {
           "TestFeature": {
