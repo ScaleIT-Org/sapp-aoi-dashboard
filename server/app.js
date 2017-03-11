@@ -18,8 +18,14 @@ var buildSchema  = require('graphql');
 var jsonToGraphql = require("json-to-graphql");
 var jsonldVis = require('../wwwroot/js/jsonld-vis')
 
-		
-var app = express();
+var root = './wwwroot/js';
+var netjet = require('netjet');  
+
+var app = express().use(netjet({
+    cache: {
+      max: 200
+    }
+  }));
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -47,7 +53,10 @@ var options = {
   cert: fs.readFileSync('./server.crt')
 }
 
-var server = http2.createServer(options, app);
+
+
+//var server = http2.createServer(options, app); //HTTPS SERVER
+var server = http.createServer(app);	//HTTP SERVER
 var io = require('socket.io')(server);
 server.listen(app.get('port'), function () {
 	    console.log('Express server listening on port ' + app.get('port'));
@@ -138,47 +147,18 @@ io.on('connection', function(socket){
 });
 
 
-
-
-/*wsServer = new WebSocketServer({
-    httpServer: server,
-    autoAcceptConnections: false
-});
-wsServer.on('connection', function(ws) {
-	console.log('connected');
-    ws.on('message', function(message) {
-        console.log('received: %s', message);
-    });
-    ws.send('something');
-});
-wsServer.on('request', function(request) {
-    var connection = request.accept('echo-protocol', request.origin);
-    console.log((new Date()) + ' Connection accepted.');
-    connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-            console.log('Received Message: ' + message.utf8Data);
-            connection.sendUTF(message.utf8Data);
-        }
-        else if (message.type === 'binary') {
-            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-            connection.sendBytes(message.binaryData);
-        }
-    });
-    connection.on('close', function(reasonCode, description) {
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-    });
-});*/
-
 //********************System Information
+var isWin = /^win/.test(process.platform);
+if(!isWin){
+	var si = require('systeminformation');
+	var sidata = {};
 
-var si = require('systeminformation');
-var sidata = {};
-
-setInterval(function gatherData() {
-  si.getAllData(function (data) {
-         sidata = data;
-  }, null, null);
-}, 5000);
+	setInterval(function gatherData() {
+	  si.getAllData(function (data) {
+	         sidata = data;
+	  }, null, null);
+	}, 5000);
+}
 
 //********************GRAPHQL TESTING
 
