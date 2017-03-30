@@ -95,19 +95,19 @@ $(document).ready(function () {
           $('#chart').show();
           $('#chart2').hide();
           $('#chart3').hide();
-          $('#chart4').hide();
+          //$('#chart4').hide();
         }
         if (selected === "Plotly"){
           $('#chart').hide();
           $('#chart2').show();
           $('#chart3').hide();
-          $('#chart4').hide();
+          //$('#chart4').hide();
         }
         if (selected === "Plottable") {
           $('#chart').hide();
           $('#chart2').hide();
           $('#chart3').show();
-          $('#chart4').hide();
+          //$('#chart4').hide();
         }
         if (selected === "jsonVis") {
           $('#chart').hide();
