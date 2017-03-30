@@ -1,3 +1,6 @@
+body {
+    margin: 0;            /* Reset default margin */
+}
 #scaleit-bar-logo {
     height: 30px;
     border-radius: 50%;

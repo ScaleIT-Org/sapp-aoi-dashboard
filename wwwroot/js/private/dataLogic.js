@@ -142,7 +142,7 @@ $(document).ready(function () {
 //*********************************************************************** Helper Functions
   function initDropdowns(){
 
-    $('#Charts').selectpicker('val', 'Plottable');
+    $('#Charts').selectpicker('val', 'Plotly');
 
     if (jsonObject === undefined){
       $('.selectpicker').trigger('change');

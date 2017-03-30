@@ -51,7 +51,7 @@
 				<!-- ScaleIT Sidebar from https://blackrockdigital.github.io/startbootstrap-simple-sidebar/ -->
 		<link rel="stylesheet" href="css/simple-sidebar.css">
 		<link rel="stylesheet" href="css/font-awesome.min.css">
-		<link rel="stylesheet" href="css/sidebarstyle.css">
+		<link rel="stylesheet" href="css/style.css">
 
 		<!-- *********************************** Selfmade JS Magic ***************************************************-->
 		<!-- Scripts and Logic by Nico Kuhn -->
@@ -102,23 +102,13 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
 	        <div id="data-app1"> 
-	        	<h1><img style="height: 3em;" src="images/Logo_SICK_AG_2009.svg.png"> AOI Data Systems</h1>
-	        	<h2>AOI Maschine 1</h2>
-	        	<h3 class="status">Status:</h3>
-	        	<p class="status status-text-ok">OK</p>
+	        	<iframe frameborder=0 scrolling="no" src="http://localhost:3000/machine1" style="top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100vh; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
 	        </div>
 	        <div id="data-app2"> 
-	        	<h1><img style="height: 3em;" src="images/Logo_SICK_AG_2009.svg.png"> AOI Data Systems</h1>
-	        	<h2>AOI Maschine 2</h2>
-	        	<h3 class="status">Status:</h3>
-	        	<p class="status status-text-warning">Warnung - Material fehlt</p>
+	        	<iframe frameborder=0 scrolling="no" src="http://localhost:3000/machine2" style="top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100vh; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
 	        </div>
 	        <div id="notification-app"> 
-	        	<h1><img style="height: 3em;" src="images/Logo_SICK_AG_2009.svg.png"> AOI Data Systems</h1>
-	        	<h2>Meldungen</h2>
-	        	<ul>
-	        		<li>AOI Maschine 2: <span style="font-size: 1em" class="status-text-warning">Warnung - Material fehlt</span></li>
-	        	</ul>
+	        	<iframe frameborder=0 scrolling="no" src="http://localhost:3000/notification" style="top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100vh; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
 	        </div>
             <div id="content" class="container-fluid">
                <div class="row">

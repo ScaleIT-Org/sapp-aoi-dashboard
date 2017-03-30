@@ -67,6 +67,18 @@ app.get('/', function (req, res)
 {
     res.render('index.html');
 });
+app.get('/machine1', function (req, res)
+{
+    res.render('machine1.html');
+});
+app.get('/machine2', function (req, res)
+{
+    res.render('machine2.html');
+});
+app.get('/notification', function (req, res)
+{
+    res.render('notification.html');
+});
 
 //Read JSONLD file
 var testJsonPath = path.join(__dirname,'../data/aoiTestStep201677183729977.json');
