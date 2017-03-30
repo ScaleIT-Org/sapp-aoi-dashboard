@@ -144,7 +144,7 @@
 										  </optgroup>
 										</select>
 
-										<select class="selectpicker pull-right" data-width="fit" id="Charts" data-live-search="true" title="Chart Selection">
+								        <select class="selectpicker pull-right" data-width="fit" id="Charts" data-live-search="true" title="Chart Selection">
 										  <option value="Highcharts"> Highcharts</option>
 										  <option value="Plotly"> Plotly</option>
 										  <option value="Plottable"> Plottable</option>
@@ -180,6 +180,8 @@
 										  </div>
 										</div>
 									</div>
+
+									<a class="btn btn-default pull-right" id="add-new-widget" href="#">+ Add Widget</a>
 
 
 			<script type="text/javascript">
@@ -257,6 +259,30 @@
 			  removeTimeout: 2000
 
 			  });
+			  new function () {
+ 
+                this.grid = $('.grid-stack').data('gridstack');
+                this.addNewWidget = function () {
+                    var node = {
+                                x: 0,
+                                y: 999,
+                                width: 2,
+                                height: 4,
+                                content: '<ul style="padding:8px">'
+                            };
+                    node.content += '<li><a class="btn btn-primary btn-md" id="newHighchart">+ Plot (Highcharts)</a> </li> <br>' ;
+                    node.content += '<li><a class="btn btn-primary btn-md" id="newPlotly">+ Plot (Plotly)</a> </li> <br>';
+                    node.content += '<li><a class="btn btn-primary btn-md" id="newPlotable">+ Plot (Plotable)</a> </li> <br>';
+                    node.content += '<li><a class="btn btn-primary btn-md" id="newJsonVis">+ JsonVis </a> </li> <br>';
+                    node.content += '<li><input type="text" class="form-control" id="ajaxconfig" placeholder="iframe URL" ><a class="btn btn-primary btn-xs" id="newUrl" href="#"> Ok </a>';
+                    node.content += '</ul>';
+
+                    this.grid.addWidget($('<div><div class="grid-stack-item-content panel panel-primary" style="box-shadow: 2px 2px 20px grey;">' + node.content + '</div></div>'),
+                            node.x, node.y, node.width, node.height, true);
+                    return false;
+                }.bind(this);
+                $('#add-new-widget').click(this.addNewWidget);
+            };
 			});
 			</script>
 								</fieldset>
