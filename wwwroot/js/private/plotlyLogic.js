@@ -28,81 +28,6 @@
 		  	size: 12
 		  }
 		}];
-
-	$(document).ready(function () {
-		var data = []
-		var addIndex = 1;
-		var seriesNr = 1;
-		colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ]
-		/*for (b in jsonObject.BoardsUnderTest) {
-			
-			var seriesData = {
-				id: b,
-				x: [],
-				y: [],
-				mode: 'markers',
-				type: 'scatter',
-				name: 'BoardsUnderTest '+b,
-				showlegend: true,
-		  		visible: false,
-				text: [],
-				hoverinfo: "x+y+text",
-				marker: {
-				  	size: 12,
-				  	color: colors[seriesNr - 1]
-				}
-			};
-
-			seriesNr++;			
-			var Board = jsonObject.BoardsUnderTest[b].ComponentsUnderTest;
-			for (i in Board)
-			{	
-				if (i.startsWith('C')) {
-					//COMPONENT
-					var x = null, y = null, label = "";
-					for (j in Board[i].TestFeature)
-					{
-						if(x === null) {
-							x = parseInt(Board[i].TestFeature[j].Value);
-						} else {
-							y = parseInt(Board[i].TestFeature[j].Value);
-						}
-						label = i;
-					}
-				seriesData.x.push(x);
-				seriesData.y.push(y);
-				seriesData.text.push(label);
-				}
-				if(i.startsWith('IC') ){
-					//INTEGRATED CIRCUIT
-
-					var x = null, y = null, label = "";
-					for (j in Board[i].TestFeature)
-					{
-						var done = false;
-						if(x === null) {
-							x = parseInt(Board[i].TestFeature[j].Value);
-						} else {
-							y = parseInt(Board[i].TestFeature[j].Value);
-							done = true;
-						}
-						label = i;
-						if(done === true) {
-							seriesData.x.push(x);
-							seriesData.y.push(y);
-							seriesData.text.push(label);
-							x = null;
-							y = null;
-							done = false;
-						}
-					}
-					mySeries[addIndex] = seriesData;
-					seriesBackup[addIndex] = (JSON.parse(JSON.stringify(seriesData)));
-					addIndex++;
-				} 
-			}
-		}*/
-
 		var layout = {
 			hovermode:'closest',
 			width: null,
@@ -233,7 +158,79 @@
 			    }
 			  ]
 		};
+	$(document).ready(function () {
+		var data = []
+		var addIndex = 1;
+		var seriesNr = 1;
+		colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ]
+		/*for (b in jsonObject.BoardsUnderTest) {
+			
+			var seriesData = {
+				id: b,
+				x: [],
+				y: [],
+				mode: 'markers',
+				type: 'scatter',
+				name: 'BoardsUnderTest '+b,
+				showlegend: true,
+		  		visible: false,
+				text: [],
+				hoverinfo: "x+y+text",
+				marker: {
+				  	size: 12,
+				  	color: colors[seriesNr - 1]
+				}
+			};
 
+			seriesNr++;			
+			var Board = jsonObject.BoardsUnderTest[b].ComponentsUnderTest;
+			for (i in Board)
+			{	
+				if (i.startsWith('C')) {
+					//COMPONENT
+					var x = null, y = null, label = "";
+					for (j in Board[i].TestFeature)
+					{
+						if(x === null) {
+							x = parseInt(Board[i].TestFeature[j].Value);
+						} else {
+							y = parseInt(Board[i].TestFeature[j].Value);
+						}
+						label = i;
+					}
+				seriesData.x.push(x);
+				seriesData.y.push(y);
+				seriesData.text.push(label);
+				}
+				if(i.startsWith('IC') ){
+					//INTEGRATED CIRCUIT
+
+					var x = null, y = null, label = "";
+					for (j in Board[i].TestFeature)
+					{
+						var done = false;
+						if(x === null) {
+							x = parseInt(Board[i].TestFeature[j].Value);
+						} else {
+							y = parseInt(Board[i].TestFeature[j].Value);
+							done = true;
+						}
+						label = i;
+						if(done === true) {
+							seriesData.x.push(x);
+							seriesData.y.push(y);
+							seriesData.text.push(label);
+							x = null;
+							y = null;
+							done = false;
+						}
+					}
+					mySeries[addIndex] = seriesData;
+					seriesBackup[addIndex] = (JSON.parse(JSON.stringify(seriesData)));
+					addIndex++;
+				} 
+			}
+		}*/
 		Plotly.newPlot('chart2', mySeries, layout);
 	});
 
@@ -256,7 +253,12 @@
 			    });
 	        });
 	    }
-	    Plotly.redraw('chart2');
+	    
+	    plotlyElements = document.getElementsByClassName("js-plotly-plot");
+	    for (var i = 0; i < plotlyElements.length; ++i) {
+	        var item = plotlyElements[i]; 
+	    	Plotly.redraw(item.id);
+	    }
 	}
 
 	function dropdownComponentActionPlotly() {
@@ -295,7 +297,11 @@
 	        mySeriesIndex++;
 
 	    });
-	    Plotly.redraw('chart2');
+	    plotlyElements = document.getElementsByClassName("js-plotly-plot");
+	    for (var i = 0; i < plotlyElements.length; ++i) {
+	        var item = plotlyElements[i]; 
+	    	Plotly.redraw(item.id);
+	    }
 	}
 
 	function updateChartDataPlotly(e) {

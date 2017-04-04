@@ -1,19 +1,23 @@
-var plot;
+var plottablePlots = [];
+
+// SCATTER PLOT
+var xScale = new Plottable.Scales.Linear();
+var yScale = new Plottable.Scales.Linear();
+
+var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
+var yAxis = new Plottable.Axes.Numeric(yScale, "left");
+
+var plotHeading = new Plottable.Components.TitleLabel("SICK AOI DATA X, Y Shift", "0").yAlignment("center")
+var plotHeading2 = new Plottable.Components.Label("Auftrag 5855733", "0").yAlignment("center").padding(10);
+
 $(document).ready(function() {
-
-	// SCATTER PLOT
-	var xScale = new Plottable.Scales.Linear();
-	var yScale = new Plottable.Scales.Linear();
-
-	var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
-  	var yAxis = new Plottable.Axes.Numeric(yScale, "left");
 
 	plot = new Plottable.Plots.Scatter()
 	  .x(function(d) { return d.x; }, xScale)
 	  .y(function(d) { return d.y; }, yScale)
   	  .size(function(d) { return d.radius; })
 	  .attr("fill", function(d) { return d.color; });
-
+	plottablePlots.push(plot);
 
 	//BAND PLOT
 	var bands = [
@@ -32,8 +36,7 @@ $(document).ready(function() {
 
 
   	//LABELS
-  	var plotHeading = new Plottable.Components.TitleLabel("SICK AOI DATA X, Y Shift", "0").yAlignment("center")
-  	var plotHeading2 = new Plottable.Components.Label("Auftrag 5855733", "0").yAlignment("center").padding(10);
+
 
   	//Putting all together
 	var plotAndBand = new Plottable.Components.Group([bandPlot, plot]);
@@ -150,8 +153,10 @@ function updateChartDataPlottable(e) {
 		cIndex++;
 	}
 	dataset = new Plottable.Dataset(data)
-	plot.addDataset(dataset);
-	dataset.data(data);
-	dropdownBoardActionPlottable();
-	plot.redraw();
+	plottablePlots.forEach(function(entry) {
+	    	entry.addDataset(dataset);
+			dataset.data(data);
+			dropdownBoardActionPlottable();
+			entry.redraw();
+	});
 }

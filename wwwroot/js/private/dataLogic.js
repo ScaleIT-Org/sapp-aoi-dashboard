@@ -152,7 +152,7 @@ $(document).ready(function () {
     //Set Data
     for (b in jsonObject.BoardsUnderTest) {
       // Add options to Bootstrap-Select 
-      $("#Boards").append($('<option>', {value: b,text: b}));
+      /*$("#Boards").append($('<option>', {value: b,text: b}));
       $('.selectpicker').selectpicker('refresh');
 
       var chart = $('#chart').highcharts();
@@ -162,7 +162,7 @@ $(document).ready(function () {
             showInLegend: false, 
             visible: false,
             data: []
-      });
+      });*/
 
     }
 
@@ -217,6 +217,20 @@ function updateChartData() {
       if (jsonObject === undefined){
         return;
       } 
+      //Update Dropdown Menue
+      var dropdownBoards = [];
+      $('#Boards option').each(function(){
+         dropdownBoards.push($(this).val());
+      })
+      for (b in jsonObject.BoardsUnderTest) {
+        if($.inArray(b, dropdownBoards) === -1){
+          $("#Boards").append($('<option>', {value: b,text: b}));
+          console.log("appended")
+        }
+      }
+      $('.selectpicker').selectpicker('refresh');
+      
+
       // Check for Web worker support!
       if (typeof(Worker) !== "undefined") {
             // Check if Web worker already exists!
@@ -259,6 +273,7 @@ function updateChartData() {
       }
 }
 function localWorker(e) {
+  console.log("LOKAL")
   var jsonObject = e.data;
   var result = {}
   for (b in jsonObject.BoardsUnderTest) {
