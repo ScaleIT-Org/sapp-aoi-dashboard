@@ -1,16 +1,16 @@
 var plottablePlots = [];
 
-// SCATTER PLOT
-var xScale = new Plottable.Scales.Linear();
-var yScale = new Plottable.Scales.Linear();
-
-var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
-var yAxis = new Plottable.Axes.Numeric(yScale, "left");
-
-var plotHeading = new Plottable.Components.TitleLabel("SICK AOI DATA X, Y Shift", "0").yAlignment("center")
-var plotHeading2 = new Plottable.Components.Label("Auftrag 5855733", "0").yAlignment("center").padding(10);
-
 $(document).ready(function() {
+
+	// SCATTER PLOT
+	var xScale = new Plottable.Scales.Linear();
+	var yScale = new Plottable.Scales.Linear();
+
+	var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
+	var yAxis = new Plottable.Axes.Numeric(yScale, "left");
+
+	var plotHeading = new Plottable.Components.TitleLabel("SICK AOI DATA X, Y Shift", "0").yAlignment("center")
+	var plotHeading2 = new Plottable.Components.Label("Auftrag 5855733", "0").yAlignment("center").padding(10);
 
 	plot = new Plottable.Plots.Scatter()
 	  .x(function(d) { return d.x; }, xScale)
@@ -93,7 +93,7 @@ $(document).ready(function() {
 	  plot.redraw();
 	});
 
-	$('#chart3').attr('height', 600);
+	$('#chart3').attr('height', 400);
 	$('#chart3').attr('width', "95%");
 	$('#chart3').attr('style', "display: block; margin: auto; overflow: visible;");
 
@@ -133,18 +133,23 @@ function dropdownAction() {
 		cIndex++;
 	}
 
-	dataset.data(data);
-	plot.redraw();
+	datasets.forEach(function(entry) {
+			entry.data(data);
+	});
+	plottablePlots.forEach(function(entry) {
+			entry.redraw();
+	});
 }
 
 var tempData;
 var dataset;
+var data = [{"board": "", "label": "Reference" ,"x": 0, "y": 0, "radius": 13, "color": "#000000"}];
 function updateChartDataPlottable(e) {
 	//console.log(e.data);
 	tempData = e;
 	var colors = ['#0000FF', '#fc9c3a', '#11a200', '#95c200'];
 	var cIndex = 0;
-	var data = [{"board": "", "label": "Reference" ,"x": 0, "y": 0, "radius": 13, "color": "#000000"}];
+	data = [{"board": "", "label": "Reference" ,"x": 0, "y": 0, "radius": 13, "color": "#000000"}];
 
 	for(b in e.data) {
 		for(i in e.data[b][0]) {
@@ -152,8 +157,10 @@ function updateChartDataPlottable(e) {
 		};
 		cIndex++;
 	}
-	dataset = new Plottable.Dataset(data)
+	datasets = [];
 	plottablePlots.forEach(function(entry) {
+			dataset = new Plottable.Dataset(data)
+			datasets.push(dataset);
 	    	entry.addDataset(dataset);
 			dataset.data(data);
 			dropdownBoardActionPlottable();

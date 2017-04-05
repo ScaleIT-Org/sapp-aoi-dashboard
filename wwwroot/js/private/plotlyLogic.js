@@ -31,7 +31,7 @@
 		var layout = {
 			hovermode:'closest',
 			width: null,
-			height: 600,
+			height: null,
 			legend: {"orientation": "h"},
 		  	title:'SICK AOI DATA X, Y Shift <br> <span style="font-size: 10pt">Auftrag 5855733</span>',
 		  	colors: ['#0000FF', '#fc9c3a', '#11a200', '#95c200' ],
@@ -258,6 +258,8 @@
 	    for (var i = 0; i < plotlyElements.length; ++i) {
 	        var item = plotlyElements[i]; 
 	    	Plotly.redraw(item.id);
+
+
 	    }
 	}
 

@@ -225,7 +225,6 @@ function updateChartData() {
       for (b in jsonObject.BoardsUnderTest) {
         if($.inArray(b, dropdownBoards) === -1){
           $("#Boards").append($('<option>', {value: b,text: b}));
-          console.log("appended")
         }
       }
       $('.selectpicker').selectpicker('refresh');

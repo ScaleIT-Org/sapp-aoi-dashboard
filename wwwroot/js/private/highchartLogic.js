@@ -25,7 +25,6 @@ var highchartsOptions = {
             type: 'scatter',
             zoomType: 'xy',
             width: null,
-            height: 600,
             events : {
                 load : function() {/*
                         if (jsonObject === undefined){

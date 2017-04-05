@@ -69,8 +69,22 @@ $(function () {
 			  removable: true,
 
 			  // time in milliseconds before widget is being removed while dragging outside of the grid
-			  removeTimeout: 2000
+			  removeTimeout: 2000,
 
+			  });
+			  $('.grid-stack').on('resizestop', function (event, ui) {
+				//console.debug(ui.element[0].offsetHeight);
+				//console.debug(ui.element[0].attributes.getNamedItem("data-gs-width").value);
+				//Highchart Resize
+				Highcharts.charts.forEach(function(entry) {
+				 	entry.reflow();
+				});
+				//Plotly Resize
+				var update = {
+				  width: ui.element[0].offsetWidth,  // or any new width
+				  height: ui.element[0].offsetHeight-20  // " "
+				};
+				try{Plotly.relayout(ui.element[0].getElementsByClassName("js-plotly-plot")[0].id, update)}catch(e){};
 			  });
 			  new function () {
  
@@ -113,6 +127,7 @@ $(function () {
 				var ul = document.createElement('ul');
 				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
 				ul.setAttribute("id", uid);
+				ul.setAttribute("style", "margin-left: -5%;");
 				node.appendChild(ul);
 
 	            var chart = $('#'+ uid).highcharts(highchartsOptions);
@@ -134,9 +149,10 @@ $(function () {
 				var ul = document.createElement('ul');
 				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
 				ul.setAttribute("id", uid);
+				ul.setAttribute("style", "margin-left: -5%;");
 				node.appendChild(ul);
-
-	            Plotly.newPlot(uid, mySeries, layout);
+				var copiedLayout = jQuery.extend({}, layout)
+	            Plotly.newPlot(uid, mySeries, copiedLayout);
 	            $('.grid-stack').data('gridstack').setAnimation(true);
 	        }
 	        function newPlotable(gridElement){
@@ -154,9 +170,19 @@ $(function () {
 				var ul = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
 				ul.setAttribute("id", uid);
+				ul.setAttribute("style", "margin-left: -5%;");
 				node.appendChild(ul);
 
 	            var plot;
+
+	            var xScale = new Plottable.Scales.Linear();
+				var yScale = new Plottable.Scales.Linear();
+
+				var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
+				var yAxis = new Plottable.Axes.Numeric(yScale, "left");
+
+				var plotHeading = new Plottable.Components.TitleLabel("SICK AOI DATA X, Y Shift", "0").yAlignment("center")
+				var plotHeading2 = new Plottable.Components.Label("Auftrag 5855733", "0").yAlignment("center").padding(10);
 	            
 	            plot = new Plottable.Plots.Scatter()
 				  .x(function(d) { return d.x; }, xScale)
@@ -190,6 +216,44 @@ $(function () {
 			        [null,  xAxis]
 			      	]);
 			  	chart.renderTo('#'+uid);
+
+			  	//Tooltip
+
+				var tooltipAnchorSelection = plot.foreground().append("circle").attr({
+				  r: 3,
+				  opacity: 0,
+				});
+
+				var tooltipAnchor = $(tooltipAnchorSelection.node());
+				tooltipAnchor.tooltip({
+				  animation: false,
+				  container: "body",
+				  placement: "auto",
+				  title: "text",
+				  trigger: "manual",
+				  html: true,
+				});
+
+				// Setup Interaction.Pointer
+				var pointer = new Plottable.Interactions.Pointer();
+				pointer.onPointerMove(function(p) {
+				  var closest = plot.entityNearest(p);
+				  if (closest) {
+				    tooltipAnchorSelection.attr({
+				      cx: closest.position.x,
+				      cy: closest.position.y,
+				      "data-original-title": "BoardsUnderTest " + closest.datum.board + "<br>" + closest.datum.label + "<br>" + closest.datum.x + "x, " + closest.datum.y + "y",
+				    });
+				    tooltipAnchor.tooltip("show");
+				  }
+				});
+
+				pointer.onPointerExit(function() {
+				  tooltipAnchor.tooltip("hide");
+				});
+
+				pointer.attachTo(plot);
+
 			  	plot.redraw();
 			  	plottablePlots.push(plot);
 			  	updateChartData();
