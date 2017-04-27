@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	d3.jsonldVis({"No Data": 0}, '#chart4',     {
+	/*d3.jsonldVis({"No Data": 0}, '#chart4',     {
 	  h: null, // height
 	  w: 800, // width
 	  maxLabelWidth: 250, // maximum label width
@@ -8,7 +8,7 @@ $(document).ready(function() {
 	  transitionEase: 'cubic-in-out', // transition easing function
 	  minRadius: 30 ,// minimum node radius
 	  scalingFactor: 5 // factor to scale node sizes
-	});
+	});*/
 });
 
 var initialized = false;
@@ -24,9 +24,9 @@ function updateChartDataJsonVis(e) {
 	}
 
 	//Delete previous chart
-	$('#chart4').empty();
+	//$('#chart4').empty();
 
-	d3.jsonldVis(jsonObject, '#chart4',     {
+	/*d3.jsonldVis(jsonObject, '#chart4',     {
 	  h: null, // height
 	  w: 800, // width
 	  maxLabelWidth: 250, // maximum label width
@@ -34,7 +34,7 @@ function updateChartDataJsonVis(e) {
 	  transitionEase: 'cubic-in-out', // transition easing function
 	  minRadius: 3 ,// minimum node radius
 	  scalingFactor: 500 // factor to scale node sizes
-	});
+	});*/
 
 	initialized = true;
 }

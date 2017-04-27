@@ -342,6 +342,3 @@
 		dropdownBoardActionPlotly();
 		dropdownComponentActionPlotly();
 	}
-
-
-

@@ -1,7 +1,7 @@
 //************************************************************************* Globale Variablen
 	var ajaxUrl = "http://localhost:3000/Get/";
 	var jsonObject;
-  	var sidata;
+  var sidata;
 	var init = true;
 	var sseOn = false;
 	var socket;

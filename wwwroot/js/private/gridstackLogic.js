@@ -94,13 +94,14 @@ $(function () {
                                 x: 0,
                                 y: 999,
                                 width: 2,
-                                height: 5,
+                                height: 6,
                                 content: '<ul style="padding:8px">'
                             };
                     node.content += '<li><a class="btn btn-primary btn-md" id="newHighchart" onclick="newHighchart(this)">+ Plot (Highcharts)</a> </li> <br>' ;
                     node.content += '<li><a class="btn btn-primary btn-md" id="newPlotly" onclick="newPlotly(this)">+ Plot (Plotly)</a> </li> <br>';
                     node.content += '<li><a class="btn btn-primary btn-md" id="newPlotable" onclick="newPlotable(this)">+ Plot (Plotable)</a> </li> <br>';
                     node.content += '<li><a class="btn btn-primary btn-md" id="newJsonVis" onclick="newJsonvis(this)">+ JsonVis </a> </li> <br>';
+                    node.content += '<li><a class="btn btn-primary btn-md" id="newVisjs" onclick="newVisjs(this)">+ Network Graph (VisJs) </a> </li> <br>';
                     node.content += '<li><a class="btn btn-primary btn-md" id="newMetadata" onclick="newMetadata(this)">+ Metadata </a> </li> <br>';
                     node.content += '<li><input type="text" class="form-control" id="iframeWidget" placeholder="iframe URL" ><font size="1.5">Example:http://localhost:3000/machine1</font><br><a class="btn btn-primary btn-xs" id="newUrl" onclick="newIframe(this)"> Ok </a>';
                     node.content += '</ul>';
@@ -128,6 +129,13 @@ $(function () {
 				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
 				ul.setAttribute("id", uid);
 				ul.setAttribute("style", "margin-left: -5%;");
+
+				var legend = document.createElement('legend')
+				var header = document.createTextNode("Highchart");
+				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
+				legend.appendChild(header);
+				node.appendChild(legend);
+
 				node.appendChild(ul);
 
 	            var chart = $('#'+ uid).highcharts(highchartsOptions);
@@ -149,7 +157,14 @@ $(function () {
 				var ul = document.createElement('ul');
 				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
 				ul.setAttribute("id", uid);
-				ul.setAttribute("style", "margin-left: -5%;");
+				ul.setAttribute("style", "margin-left: -5%; height: calc(100% - 50px);");
+				
+				var legend = document.createElement('legend')
+				var header = document.createTextNode("Plottable");
+				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
+				legend.appendChild(header);
+				node.appendChild(legend);
+
 				node.appendChild(ul);
 				var copiedLayout = jQuery.extend({}, layout)
 	            Plotly.newPlot(uid, mySeries, copiedLayout);
@@ -170,7 +185,14 @@ $(function () {
 				var ul = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
 				ul.setAttribute("id", uid);
-				ul.setAttribute("style", "margin-left: -5%;");
+
+				ul.setAttribute("style", ' overflow: auto; height: calc(100% - 30px); width: 100%');
+				//Top bar
+				var legend = document.createElement('legend')
+				var header = document.createTextNode("Plottable");
+				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
+				legend.appendChild(header);
+				node.appendChild(legend);
 				node.appendChild(ul);
 
 	            var plot;
@@ -271,10 +293,16 @@ $(function () {
 				);
 				//add Chart
 				$('.grid-stack').data('gridstack').setAnimation(false);
-				var ul = document.createElement('ul');
+				var ul = document.createElement('div');
 				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
 				ul.setAttribute("id", uid);
-				ul.setAttribute("style", 'overflow: scroll;');
+				ul.setAttribute("style", 'overflow: auto; height: calc(100% - 30px); width: 100%');
+				//Top bar
+				var legend = document.createElement('legend')
+				var header = document.createTextNode("Tree Graph (JsonVis)");
+				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
+				legend.appendChild(header);
+				node.appendChild(legend);
 				node.appendChild(ul);
 
 	            	d3.jsonldVis(jsonObject, '#'+uid,     {
@@ -287,6 +315,36 @@ $(function () {
 					  scalingFactor: 500 // factor to scale node sizes
 					});
 	            setTimeout(function(){$('.grid-stack').data('gridstack').setAnimation(true);}, 500);
+	        }
+	        function newVisjs(gridElement){
+				//remove Buttons
+				var node = gridElement.parentNode.parentNode.parentNode;
+				while (node.firstChild) {
+				    node.removeChild(node.firstChild);
+				}
+				//Resize Widget
+				$('.grid-stack').data('gridstack').resize(
+				    node.parentNode, 6, 10
+				);
+				//add Chart
+				$('.grid-stack').data('gridstack').setAnimation(false);
+				var ul = document.createElement('div');
+				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
+				ul.setAttribute("id", uid);
+				ul.setAttribute("style", 'height: calc(100% - 30px); width: 100%');
+				//Top bar
+				var legend = document.createElement('legend')
+				var header = document.createTextNode("Network Graph (Visjs)");
+				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
+				legend.appendChild(header);
+				node.appendChild(legend);
+
+				node.appendChild(ul);
+
+	            var network = new vis.Network(document.getElementById(uid), data, options);
+				
+				$('.grid-stack').data('gridstack').setAnimation(true);
+	            updateChartData();
 	        }
 			function newMetadata(gridElement){
 				//remove Buttons
@@ -334,18 +392,26 @@ $(function () {
 				);
 				//add Chart
 				$('.grid-stack').data('gridstack').setAnimation(false);
-				var ul = document.createElement('ul');
+				var ul = document.createElement('div');
 				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
 				ul.setAttribute("id", uid);
+				ul.setAttribute("style", 'height: calc(100% - 30px); width: 100%');
+				//Top bar
+				var legend = document.createElement('legend')
+				var header = document.createTextNode("Iframe");
+				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
+				legend.appendChild(header);
+				node.appendChild(legend);
+
 				node.appendChild(ul);
 
 	            var ifrm = document.createElement("iframe");
 
 		        ifrm.setAttribute("src", url);
 				ifrm.setAttribute("frameborder", "0");
-				ifrm.setAttribute("scrolling", "no");
+				ifrm.setAttribute("scrolling", "yes");
 		        ifrm.style.width = "100%";
 		        ifrm.style.height = "95%";
-		        node.appendChild(ifrm);
+		        ul.appendChild(ifrm);
 	            $('.grid-stack').data('gridstack').setAnimation(true);
 			}
