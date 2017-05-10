@@ -112,7 +112,7 @@ $(function () {
                 }.bind(this);
                 $('#add-new-widget').click(this.addNewWidget);
             };
-			});
+});
 			function newHighchart(gridElement){
 				//remove Buttons
 				var node = gridElement.parentNode.parentNode.parentNode;
@@ -125,20 +125,11 @@ $(function () {
 				);
 				//add Chart
 				$('.grid-stack').data('gridstack').setAnimation(false);
-				var ul = document.createElement('ul');
-				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
-				ul.setAttribute("id", uid);
-				ul.setAttribute("style", "margin-left: -5%;");
+				
+				genGridElement(node, "Tree Graph (JsonVis)");
+				node.lastChild.setAttribute("style", "margin-left: -5%");
 
-				var legend = document.createElement('legend')
-				var header = document.createTextNode("Highchart");
-				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
-				legend.appendChild(header);
-				node.appendChild(legend);
-
-				node.appendChild(ul);
-
-	            var chart = $('#'+ uid).highcharts(highchartsOptions);
+	            var chart = $('#'+ node.lastChild.getAttribute('id')).highcharts(highchartsOptions);
 	            $('.grid-stack').data('gridstack').setAnimation(true);
 	            updateChartData();
 	        }
@@ -154,20 +145,12 @@ $(function () {
 				);
 				//add Chart
 				$('.grid-stack').data('gridstack').setAnimation(false);
-				var ul = document.createElement('ul');
-				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
-				ul.setAttribute("id", uid);
-				ul.setAttribute("style", "margin-left: -5%; height: calc(100% - 50px);");
-				
-				var legend = document.createElement('legend')
-				var header = document.createTextNode("Plottable");
-				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
-				legend.appendChild(header);
-				node.appendChild(legend);
 
-				node.appendChild(ul);
+				genGridElement(node, "Tree Graph (JsonVis)");
+				node.lastChild.setAttribute("style", "margin-left: -5%; height: calc(100% - 50px);");
+
 				var copiedLayout = jQuery.extend({}, layout)
-	            Plotly.newPlot(uid, mySeries, copiedLayout);
+	            Plotly.newPlot(node.lastChild.getAttribute('id'), mySeries, copiedLayout);
 	            $('.grid-stack').data('gridstack').setAnimation(true);
 	        }
 	        function newPlotable(gridElement){
@@ -284,28 +267,18 @@ $(function () {
 	        function newJsonvis(gridElement){
 	        	//remove Buttons
 				var node = gridElement.parentNode.parentNode.parentNode;
-				while (node.firstChild) {
-				    node.removeChild(node.firstChild);
-				}
+
 				//Resize Widget
 				$('.grid-stack').data('gridstack').resize(
 				    node.parentNode, 6, 8
 				);
 				//add Chart
 				$('.grid-stack').data('gridstack').setAnimation(false);
-				var ul = document.createElement('div');
-				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
-				ul.setAttribute("id", uid);
-				ul.setAttribute("style", 'overflow: auto; height: calc(100% - 30px); width: 100%');
-				//Top bar
-				var legend = document.createElement('legend')
-				var header = document.createTextNode("Tree Graph (JsonVis)");
-				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
-				legend.appendChild(header);
-				node.appendChild(legend);
-				node.appendChild(ul);
 
-	            	d3.jsonldVis(jsonObject, '#'+uid,     {
+				genGridElement(node, "Tree Graph (JsonVis)");
+				node.lastChild.setAttribute("style", 'overflow: auto; height: calc(100% - 30px); width: 100%');
+
+	            	d3.jsonldVis(jsonObject, '#'+node.lastChild.getAttribute('id'),     {
 					  h: null, // height
 					  w: 800, // width
 					  maxLabelWidth: 250, // maximum label width
@@ -319,53 +292,34 @@ $(function () {
 	        function newVisjs(gridElement){
 				//remove Buttons
 				var node = gridElement.parentNode.parentNode.parentNode;
-				while (node.firstChild) {
-				    node.removeChild(node.firstChild);
-				}
 				//Resize Widget
 				$('.grid-stack').data('gridstack').resize(
 				    node.parentNode, 6, 10
 				);
-				//add Chart
 				$('.grid-stack').data('gridstack').setAnimation(false);
-				var ul = document.createElement('div');
-				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
-				ul.setAttribute("id", uid);
-				ul.setAttribute("style", 'height: calc(100% - 30px); width: 100%');
-				//Top bar
-				var legend = document.createElement('legend')
-				var header = document.createTextNode("Network Graph (Visjs)");
-				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
-				legend.appendChild(header);
-				node.appendChild(legend);
-
-				node.appendChild(ul);
-
-	            var network = new vis.Network(document.getElementById(uid), data, options);
 				
+				genGridElement(node, "Network Graph (Visjs)")
+				
+				var loading = document.createElement('div');
+				loading.setAttribute("id", "visjsload");
+				node.insertBefore(loading, node.childNodes[1]);
+	            network = new vis.Network(node.lastChild, data, options);
 				$('.grid-stack').data('gridstack').setAnimation(true);
 	            updateChartData();
 	        }
 			function newMetadata(gridElement){
 				//remove Buttons
 				var node = gridElement.parentNode.parentNode.parentNode;
-				while (node.firstChild) {
-				    node.removeChild(node.firstChild);
-				}
+
 				//Resize Widget
 				$('.grid-stack').data('gridstack').resize(
 				    node.parentNode, 4, 5
 				);
 				//add Chart
 				$('.grid-stack').data('gridstack').setAnimation(false);
-				var ul = document.createElement('ul');
-				var legend = document.createElement('legend')
-				var header = document.createTextNode("Metadata");
-				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
-				ul.setAttribute("id", uid);
-				legend.appendChild(header);
-				node.appendChild(legend);
-				node.appendChild(ul);
+
+				genGridElement(node, "Metadata")
+				node.lastChild.setAttribute("style", 'margin-left: 20px')
 
 				if (jsonObject === undefined){
 			        return;
@@ -376,34 +330,22 @@ $(function () {
 			            str += i + ""+" : "+ jsonObject[i]+""+"<br>";
 			            }
 			      }
-			      document.getElementById(uid).innerHTML = str
+			      node.lastChild.innerHTML = str
 	            $('.grid-stack').data('gridstack').setAnimation(true);
 			}
 			function newIframe(gridElement){
 				//remove Buttons
 				var node = gridElement.parentNode.parentNode.parentNode;
 				var url = $("#iframeWidget").val();
-				while (node.firstChild) {
-				    node.removeChild(node.firstChild);
-				}
 				//Resize Widget
 				$('.grid-stack').data('gridstack').resize(
 				    node.parentNode, 6, 8
 				);
 				//add Chart
 				$('.grid-stack').data('gridstack').setAnimation(false);
-				var ul = document.createElement('div');
-				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
-				ul.setAttribute("id", uid);
-				ul.setAttribute("style", 'height: calc(100% - 30px); width: 100%');
-				//Top bar
-				var legend = document.createElement('legend')
-				var header = document.createTextNode("Iframe");
-				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
-				legend.appendChild(header);
-				node.appendChild(legend);
+				
+				genGridElement(node, "iframe")
 
-				node.appendChild(ul);
 
 	            var ifrm = document.createElement("iframe");
 
@@ -412,6 +354,78 @@ $(function () {
 				ifrm.setAttribute("scrolling", "yes");
 		        ifrm.style.width = "100%";
 		        ifrm.style.height = "95%";
-		        ul.appendChild(ifrm);
+		        node.lastChild.appendChild(ifrm);
 	            $('.grid-stack').data('gridstack').setAnimation(true);
 			}
+
+			function genGridElement(node, title) {
+				while (node.firstChild) {
+				    node.removeChild(node.firstChild);
+				}
+				var ul = document.createElement('div');
+				var uid = ("w").concat(Math.floor((1 + Math.random()) * 0x10000).toString(16));
+				ul.setAttribute("id", uid);
+				ul.setAttribute("style", 'height: calc(100% - 30px); width: 100%  margin:0');
+				//Top bar
+				var legend = document.createElement('legend')
+				var header = document.createTextNode(title);
+				var closeButton = document.createElement('button')
+				var closeButtonSpan = document.createElement('span')
+				closeButtonSpan.className = "glyphicon glyphicon-remove-circle";
+				closeButton.className = "btn btn-xs btn-default pull-right removeWidget";
+				legend.setAttribute("style", 'height: 30px; width: 100%; margin: 0px;');
+				legend.appendChild(header);
+				closeButton.appendChild(closeButtonSpan);
+				legend.appendChild(closeButton);//'<button type="button" class="btn btn-default removeWidget" aria-label="Left Align"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>')
+				node.appendChild(legend);
+
+				node.appendChild(ul);
+			}
+
+
+			$(document).on('click', '.removeWidget', function (e) {
+			    e.preventDefault();
+			    var grid = $('.grid-stack').data('gridstack'),
+			        el = $(this).closest('.grid-stack-item')
+
+			    grid.remove_widget(el);
+			});
+
+
+//********************************************************************************************DASHBOARD-INITIALISATION 
+//This one is executed after all the other scripts when Page is Ready
+
+		function initDashboard() {
+			var node = {
+                x: 0,
+                y: 999,
+                width: 2,
+                height: 6,
+                content: '<ul style="padding:8px">'
+            };
+
+			//Metadata Widget
+	        var test = $('.grid-stack').data('gridstack').addWidget($('<div><div class="grid-stack-item-content panel panel-primary" style="box-shadow: 2px 2px 20px grey;"></div></div>'),
+	                node.x, node.y, node.width, node.height, true);
+
+			var tempElement = document.createElement("div");
+			var tempElement2 = document.createElement("div");
+			var tempElement3 = document.createElement("div");
+			
+	        newMetadata(test[0].firstChild.appendChild(tempElement).appendChild(tempElement2).appendChild(tempElement3));
+
+			
+	        //Default Widget
+
+	        node.content += '<li><a class="btn btn-primary btn-md" id="newHighchart" onclick="newHighchart(this)">+ Plot (Highcharts)</a> </li> <br>' ;
+	        node.content += '<li><a class="btn btn-primary btn-md" id="newPlotly" onclick="newPlotly(this)">+ Plot (Plotly)</a> </li> <br>';
+	        node.content += '<li><a class="btn btn-primary btn-md" id="newPlotable" onclick="newPlotable(this)">+ Plot (Plotable)</a> </li> <br>';
+	        node.content += '<li><a class="btn btn-primary btn-md" id="newJsonVis" onclick="newJsonvis(this)">+ JsonVis </a> </li> <br>';
+	        node.content += '<li><a class="btn btn-primary btn-md" id="newVisjs" onclick="newVisjs(this)">+ Network Graph (VisJs) </a> </li> <br>';
+	        node.content += '<li><a class="btn btn-primary btn-md" id="newMetadata" onclick="newMetadata(this)">+ Metadata </a> </li> <br>';
+	        node.content += '<li><input type="text" class="form-control" id="iframeWidget" placeholder="iframe URL" ><font size="1.5">Example:http://localhost:3000/machine1</font><br><a class="btn btn-primary btn-xs" id="newUrl" onclick="newIframe(this)"> Ok </a>';
+	        node.content += '</ul>';
+
+	        $('.grid-stack').data('gridstack').addWidget($('<div><div class="grid-stack-item-content panel panel-primary" style="box-shadow: 2px 2px 20px grey;">' + node.content + '</div></div>'),
+	                node.x, node.y, node.width, node.height, true);
+	    }

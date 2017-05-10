@@ -17,8 +17,6 @@
     } else {
       //Update the chart data
       updateChartData(); 
-      //Crawl and show Metadata
-      updateMetadata();
     }
 	});
 
@@ -67,7 +65,6 @@ $(document).ready(function () {
 			 socket.on('json', function(msg){
 			    jsonObject = msg;
 			    ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
-			    updateMetadata();
 			  });
 	    } else {
 	   	/*WebSockets are not supported. Try a fallback method like long-polling etc*/
@@ -129,7 +126,6 @@ $(document).ready(function () {
         sidata = JSON.parse(event.data).si;
         ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
         setTimeout(updateMonitoringData(), 0 );
-        updateMetadata();
       }
       }, false);
       
@@ -148,7 +144,6 @@ $(document).ready(function () {
       $('.selectpicker').trigger('change');
       return;
     } 
-
     //Set Data
     for (b in jsonObject.BoardsUnderTest) {
       // Add options to Bootstrap-Select 
@@ -194,7 +189,9 @@ function doAjax() {
               //Update the chart data
               updateChartData();
               //Crawl and show Metadata
-              updateMetadata();
+              initDropdowns();
+              initDashboard();
+
         }
   });
 }
@@ -243,6 +240,7 @@ function updateChartData() {
                         updateChartDataPlotly(e);
                         updateChartDataPlottable(e);
                         updateChartDataJsonVis(e);
+                        updateChartDataVisjs(e);
                         return;
                   }
 
@@ -260,6 +258,7 @@ function updateChartData() {
           updateChartDataPlotly(e);
           updateChartDataPlottable(e);
           updateChartDataJsonVis(e);
+          updateChartDataVisjs(e);
             
           stopWorker();
       }, false);  
