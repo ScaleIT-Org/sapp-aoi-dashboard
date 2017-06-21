@@ -1,0 +1,19 @@
+{
+  "name": "machine1",
+  "version": "0.0.0",
+  "description": "machine1",
+  "main": "machine1.js",
+  "author": {
+    "name": "Kuhno92",
+    "email": ""
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "ejs": "^2.5.1",
+    "express": "3.2.4",
+    "stylus": "^0.54.5"
+  },
+  "scripts": {
+    "start": "node machine1.js"
+  }
+}

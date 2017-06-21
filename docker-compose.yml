@@ -1,7 +1,15 @@
-aoi-vis-app:
-        image: scaleit/aoi-vis-app
-        ports:
-                - "3000:3000"
-        expose:
-                - 3000
-                
+version: '2'
+services:
+  dashboard:
+   build: ./dashboard/
+   ports:
+     - "3000:3000"
+  m1:
+    build: ./machine1/
+    ports:
+      - "3001:3000"
+  m2:
+   build: ./machine2/
+   ports:
+     - "3002:3000"
+
