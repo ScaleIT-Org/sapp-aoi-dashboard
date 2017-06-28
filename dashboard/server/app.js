@@ -117,7 +117,7 @@ app.get('/sse', function (req, res) {
         jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
         res.write("id: " + i + "\n");
         res.write("data: " + JSON.stringify({"si": sidata, "data" : jsonld}) + "\n\n");
-        timeoutId = setTimeout(f, 5000);
+        timeoutId = setTimeout(f, 20000);
       } else {
         res.end();
       }
@@ -158,9 +158,12 @@ if(!isWin){
 	var sidata = {};
 
 	setInterval(function gatherData() {
-	  si.getAllData(function (data) {
-	         sidata = data;
-	  }, null, null);
+	  si.currentLoad(function (data) {
+	         sidata.currentLoad = data;
+	  });
+    si.mem(function (data) {
+           sidata.mem = data;
+    });
 	}, 5000);
 }
 

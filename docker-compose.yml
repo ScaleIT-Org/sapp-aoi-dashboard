@@ -9,7 +9,12 @@ services:
     ports:
       - "3001:3000"
   m2:
-   build: ./machine2/
-   ports:
-     - "3002:3000"
-
+    build: ./machine2/
+    ports:
+      - "3002:3000"
+  portainer:
+    image: portainer/portainer
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
