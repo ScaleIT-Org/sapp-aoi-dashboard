@@ -103,7 +103,7 @@ $(function () {
                     node.content += '<li><a class="btn btn-primary btn-md" id="newJsonVis" onclick="newJsonvis(this)">+ JsonVis </a> </li> <br>';
                     node.content += '<li><a class="btn btn-primary btn-md" id="newVisjs" onclick="newVisjs(this)">+ Network Graph (VisJs) </a> </li> <br>';
                     node.content += '<li><a class="btn btn-primary btn-md" id="newMetadata" onclick="newMetadata(this)">+ Metadata </a> </li> <br>';
-                    node.content += '<li><input type="text" class="form-control" id="iframeWidget" placeholder="iframe URL" ><font size="1.5">Example:http://localhost:3001/machine1</font><br><a class="btn btn-primary btn-xs" id="newUrl" onclick="newIframe(this)"> Ok </a>';
+                    node.content += '<li><input type="text" class="form-control" id="iframeWidget" placeholder="iframe URL" ><font size="1.5">Example:http://localhost:3001</font><br><a class="btn btn-primary btn-xs" id="newUrl" onclick="newIframe(this)"> Ok </a>';
                     node.content += '</ul>';
 
                     this.grid.addWidget($('<div><div class="grid-stack-item-content panel panel-primary" style="box-shadow: 2px 2px 20px grey;">' + node.content + '</div></div>'),
@@ -337,6 +337,10 @@ $(function () {
 				//remove Buttons
 				var node = gridElement.parentNode.parentNode.parentNode;
 				var url = $("#iframeWidget").val();
+				
+				if(!url.startsWith("http://")) {
+					url = "http://".concat(url);
+				}
 				//Resize Widget
 				$('.grid-stack').data('gridstack').resize(
 				    node.parentNode, 6, 8
@@ -423,7 +427,7 @@ $(function () {
 	        node.content += '<li><a class="btn btn-primary btn-md" id="newJsonVis" onclick="newJsonvis(this)">+ JsonVis </a> </li> <br>';
 	        node.content += '<li><a class="btn btn-primary btn-md" id="newVisjs" onclick="newVisjs(this)">+ Network Graph (VisJs) </a> </li> <br>';
 	        node.content += '<li><a class="btn btn-primary btn-md" id="newMetadata" onclick="newMetadata(this)">+ Metadata </a> </li> <br>';
-	        node.content += '<li><input type="text" class="form-control" id="iframeWidget" placeholder="iframe URL" ><font size="1.5">Example:http://localhost:3000/machine1</font><br><a class="btn btn-primary btn-xs" id="newUrl" onclick="newIframe(this)"> Ok </a>';
+	        node.content += '<li><input type="text" class="form-control" id="iframeWidget" placeholder="iframe URL" ><font size="1.5">Example:http://localhost:3001</font><br><a class="btn btn-primary btn-xs" id="newUrl" onclick="newIframe(this)"> Ok </a>';
 	        node.content += '</ul>';
 
 	        $('.grid-stack').data('gridstack').addWidget($('<div><div class="grid-stack-item-content panel panel-primary" style="box-shadow: 2px 2px 20px grey;">' + node.content + '</div></div>'),
