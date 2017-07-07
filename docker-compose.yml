@@ -18,3 +18,11 @@ services:
       - 9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # these variables are unused by this service.
+      # They are metadata required, by the letsencrypt-companion
+      - VIRTUAL_HOST
+      - VIRTUAL_PORT
+      - LETSENCRYPT_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_EMAIL
+
