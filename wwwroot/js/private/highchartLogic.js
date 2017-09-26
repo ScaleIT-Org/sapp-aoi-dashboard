@@ -66,7 +66,6 @@ var highchartsOptions = {
                                 }
                                 if(i.startsWith('IC') ){
                                     //INTEGRATED CIRCUIT
-
                                     var x = null, y = null, label = "";
                                     for (j in Board[i].TestFeature)
                                     {
@@ -238,6 +237,7 @@ var highchartsOptions = {
 $(document).ready(function () {
     var chart = $('#chart').highcharts(highchartsOptions);
 });
+
 
 
 

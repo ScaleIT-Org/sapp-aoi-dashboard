@@ -54,7 +54,6 @@ var options = {
 }
 
 
-
 //var server = http2.createServer(options, app); //HTTPS SERVER
 var server = http.createServer(app);	//HTTP SERVER
 var io = require('socket.io')(server);
@@ -123,6 +122,7 @@ app.get('/sse', function (req, res) {
     var f = function () {
       if (++i < c) {
         jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
+
         res.write("id: " + i + "\n");
         res.write("data: " + JSON.stringify({"si": sidata, "data" : jsonld}) + "\n\n");
         timeoutId = setTimeout(f, 5000);

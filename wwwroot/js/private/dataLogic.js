@@ -22,7 +22,6 @@
 
 //*********************************************************************** Register I/O Handlers
 $(document).ready(function () {
-
     var chart = $('#chart').highcharts();
 
 	//****************************************Save Config Buttong

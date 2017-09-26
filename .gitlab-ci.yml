@@ -1,0 +1,29 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - test
+
+variables:
+  CONTAINER_TEST_IMAGE: my-docker-hub/$CI_PROJECT_ID:$CI_BUILD_REF_NAME_test
+
+before_script:
+   - docker info
+
+build:
+  stage: build
+  script:
+    - docker-compose build
+test:
+  stage: test
+  before_script:
+    - docker-compose -f docker-compose.test.yml -p ci build 
+    - docker-compose -f docker-compose.test.yml -p ci up -d
+  script:
+    - docker-compose -f docker-compose.test.yml -p ci run sut  
+  after_script:
+    - docker-compose -f docker-compose.test.yml -p ci stop
+    - docker-compose -f docker-compose.test.yml -p ci rm -f
