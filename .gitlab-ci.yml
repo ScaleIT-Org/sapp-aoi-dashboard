@@ -21,7 +21,7 @@ test:
   stage: test
   before_script:
     - docker-compose -f docker-compose.test.yml -p ci build 
-    - docker-compose -f docker-compose.test.yml -p ci up    
+    - docker-compose -f docker-compose.test.yml -p ci up -d
   script:
     - docker-compose -f docker-compose.test.yml -p ci run sut  
   after_script:
