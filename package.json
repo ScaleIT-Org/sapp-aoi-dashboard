@@ -1,0 +1,28 @@
+{
+  "name": "evaulation_framework",
+  "version": "0.0.0",
+  "description": "evaulation_framework",
+  "main": "app.js",
+  "author": {
+    "name": "Kuhno92",
+    "email": ""
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "ejs": "^2.5.1",
+    "express": "3.2.4",
+    "express-graphql": "^0.6.3",
+    "graphql": "^0.9.1",
+    "json-to-graphql": "^0.1.1",
+    "socket.io": "^1.7.2",
+    "spdy": "^3.4.4",
+    "sse": "0.0.6",
+    "stylus": "*",
+    "systeminformation": "^3.6.0",
+    "websocket": "^1.0.24",
+    "ws": "^2.0.3"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
