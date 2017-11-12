@@ -3,7 +3,17 @@
 echo "Sidecar running"
 echo "pid is $$"
 
-#set -x
+#check if etcd is up and running
+STR='"health": "false"'
+STR=$(curl -sb -H "Accept: application/json" "http://192.168.0.29:2379/health")
+while [[ $STR != *'"health": "true"'* ]]
+do
+	echo "Waiting for etcd ..."
+	STR=$(curl -sb -H "Accept: application/json" "http://192.168.0.29:2379/health")
+	sleep 1
+done
+
+#Register Application
 curl -L -X PUT http://192.168.0.29:2379/v2/keys/Apps/Machine1 -d value="localhost:3001"
 curl -L -X PUT http://192.168.0.29:2379/v2/keys/Icon/Machine1 -d value="/icon/favicon.png"
 
