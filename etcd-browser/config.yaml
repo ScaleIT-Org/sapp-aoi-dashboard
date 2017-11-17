@@ -1,0 +1,6 @@
+---
+listen: 8080
+instances:
+    etcd01:
+        verify_ssl: false
+        base: http://etcd:2379/v2/keys/
