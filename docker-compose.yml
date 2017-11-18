@@ -26,6 +26,8 @@ services:
       - "-listen-client-urls=http://0.0.0.0:2379"
     ports:
       - "2379:2379"
+    environment:
+      - ETCD_CORS=*
   portainer:
     image: portainer/portainer
     ports:
