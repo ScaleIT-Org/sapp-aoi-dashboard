@@ -14,16 +14,15 @@ do
 done
 
 #Register Application
-curl -L -X PUT http://192.168.0.29:2379/v2/keys/Apps/Machine1 -d value="localhost:3001"
-curl -L -X PUT http://192.168.0.29:2379/v2/keys/Icon/Machine1 -d value="/icon/favicon.png"
+curl -L -X PUT http://192.168.0.29:2379/v2/keys/M1/url -d value="localhost:3001"
+curl -L -X PUT http://192.168.0.29:2379/v2/keys/M1/icon -d value="/icon/favicon.png"
 
 
 # SIGTERM-handler
 term_handler() {
   echo "[Sidecar] Shutting Down"
 
-  curl -L -X PUT http://192.168.0.29:2379/v2/keys/Apps/Machine1 -XDELETE
-  curl -L -X PUT http://192.168.0.29:2379/v2/keys/Icon/Machine1 -XDELETE
+  curl -L -X PUT 'http://192.168.0.29:2379/v2/keys/M1?recursive=true' -XDELETE
 
   exit 143; # 128 + 15 -- SIGTERM
 }
