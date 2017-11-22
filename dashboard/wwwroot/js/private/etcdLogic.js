@@ -27,6 +27,7 @@ function processRequest(e) {
                 //Add Iframe
                 var content = document.getElementById('page-content-wrapper');
                 var div = document.createElement("div");
+                div.style.display = "none";
                 div.setAttribute("id",response.node.nodes[i].key);
                 for(j in response.node.nodes[i].nodes){
                     if(response.node.nodes[i].nodes[j].key.slice(-3) === "url"){
