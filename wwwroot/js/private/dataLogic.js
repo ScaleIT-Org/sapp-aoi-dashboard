@@ -17,8 +17,6 @@
     } else {
       //Update the chart data
       updateChartData(); 
-      //Crawl and show Metadata
-      updateMetadata();
     }
 	});
 
@@ -66,7 +64,6 @@ $(document).ready(function () {
 			 socket.on('json', function(msg){
 			    jsonObject = msg;
 			    ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
-			    updateMetadata();
 			  });
 	    } else {
 	   	/*WebSockets are not supported. Try a fallback method like long-polling etc*/
@@ -94,19 +91,19 @@ $(document).ready(function () {
           $('#chart').show();
           $('#chart2').hide();
           $('#chart3').hide();
-          $('#chart4').hide();
+          //$('#chart4').hide();
         }
         if (selected === "Plotly"){
           $('#chart').hide();
           $('#chart2').show();
           $('#chart3').hide();
-          $('#chart4').hide();
+          //$('#chart4').hide();
         }
         if (selected === "Plottable") {
           $('#chart').hide();
           $('#chart2').hide();
           $('#chart3').show();
-          $('#chart4').hide();
+          //$('#chart4').hide();
         }
         if (selected === "jsonVis") {
           $('#chart').hide();
@@ -128,7 +125,6 @@ $(document).ready(function () {
         sidata = JSON.parse(event.data).si;
         ($('#chart').highcharts() !== undefined) ? updateChartData() : null;
         setTimeout(updateMonitoringData(), 0 );
-        updateMetadata();
       }
       }, false);
       
@@ -140,17 +136,17 @@ $(document).ready(function () {
 
 //*********************************************************************** Helper Functions
   function initDropdowns(){
-    $('#Charts').selectpicker('val', 'Plottable');
+
+    $('#Charts').selectpicker('val', 'Plotly');
 
     if (jsonObject === undefined){
       $('.selectpicker').trigger('change');
       return;
     } 
-
     //Set Data
     for (b in jsonObject.BoardsUnderTest) {
       // Add options to Bootstrap-Select 
-      $("#Boards").append($('<option>', {value: b,text: b}));
+      /*$("#Boards").append($('<option>', {value: b,text: b}));
       $('.selectpicker').selectpicker('refresh');
 
       var chart = $('#chart').highcharts();
@@ -160,7 +156,7 @@ $(document).ready(function () {
             showInLegend: false, 
             visible: false,
             data: []
-      });
+      });*/
 
     }
 
@@ -192,7 +188,9 @@ function doAjax() {
               //Update the chart data
               updateChartData();
               //Crawl and show Metadata
-              updateMetadata();
+              initDropdowns();
+              initDashboard();
+
         }
   });
 }
@@ -215,6 +213,19 @@ function updateChartData() {
       if (jsonObject === undefined){
         return;
       } 
+      //Update Dropdown Menue
+      var dropdownBoards = [];
+      $('#Boards option').each(function(){
+         dropdownBoards.push($(this).val());
+      })
+      for (b in jsonObject.BoardsUnderTest) {
+        if($.inArray(b, dropdownBoards) === -1){
+          $("#Boards").append($('<option>', {value: b,text: b}));
+        }
+      }
+      $('.selectpicker').selectpicker('refresh');
+      
+
       // Check for Web worker support!
       if (typeof(Worker) !== "undefined") {
             // Check if Web worker already exists!
@@ -228,6 +239,7 @@ function updateChartData() {
                         updateChartDataPlotly(e);
                         updateChartDataPlottable(e);
                         updateChartDataJsonVis(e);
+                        updateChartDataVisjs(e);
                         return;
                   }
 
@@ -245,6 +257,7 @@ function updateChartData() {
           updateChartDataPlotly(e);
           updateChartDataPlottable(e);
           updateChartDataJsonVis(e);
+          updateChartDataVisjs(e);
             
           stopWorker();
       }, false);  
@@ -257,6 +270,7 @@ function updateChartData() {
       }
 }
 function localWorker(e) {
+  console.log("LOKAL")
   var jsonObject = e.data;
   var result = {}
   for (b in jsonObject.BoardsUnderTest) {
