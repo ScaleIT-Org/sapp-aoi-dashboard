@@ -88,18 +88,24 @@
 		<div id="wrapper" class="">
 		<!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <ul id="sidebar-ul" class="sidebar-nav">
+            <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#">
                     <img alt="ScaleIT SICK AOI Chain" id="scaleit-bar-logo" src="images/scaleit_logo_small.png">
                     <span>ScaleIT SICK AOI Chain<span>
                     </a>
                 </li>
-                <li id="main">
-                    <a href="#" ><i class="fa fa-bar-chart"></i>Data</a>
+                <li>
+                    <a href="#" onclick="show_vis_app()"><i class="fa fa-bar-chart" aria-hidden="true"></i> Data</a>
                 </li>
-                <li id="notify">
-                    <a href="#"><i class="fa fa-bell-o"></i><span>Status</span></a>
+                <li>
+                    <a href="#" onclick="show_data_app_1()"><span><i class="fa fa-microchip" aria-hidden="true"></i> M1</span></a>
+                </li>
+                <li>
+                    <a href="#" onclick="show_data_app_2()"><i class="fa fa-microchip" aria-hidden="true"></i> M2<span style="color:red"> !</span></a>
+                </li>
+                <li>
+                    <a href="#" onclick="show_notifications_app()"><i class="fa fa-bell-o" aria-hidden="true"></i><span style="color:red"> 1</span></a>
                 </li>
             </ul>
         </div>
@@ -107,10 +113,16 @@
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-	        <div id="Status" style="display:none;"> 
-	        	<iframe frameborder=0 scrolling="no" src="http://localhost:3000/notification" style=" top:0px; left:0px; bottom:0px; right:0px; width:100%; height:90vh; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
+	        <div id="data-app1"> 
+	        	<iframe scrolling="no" seamless="seamless" src="http://localhost:3001" style="top:0px; left:0px; bottom:0px; right:0px; width:100%; height:90vh; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
 	        </div>
-            <div id="Data" class="container-fluid">
+	        <div id="data-app2"> 
+	        	<iframe frameborder=0 scrolling="no" src="http://localhost:3002" style="top:0px; left:0px; bottom:0px; right:0px; width:100%; height:90vh; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
+	        </div>
+	        <div id="notification-app"> 
+	        	<iframe frameborder=0 scrolling="no" src="http://localhost:3000/notification" style="top:0px; left:0px; bottom:0px; right:0px; width:100%; height:90vh; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
+	        </div>
+            <div id="content" class="container-fluid">
                <div class="row">
                     <div class="col-lg-12">                   
 						<!-- ###############Tab definitions ###################-->
@@ -222,4 +234,43 @@
         <!-- /#page-content-wrapper -->
     </div>
 	</body>	
+
+	<!--************************************** Hide script *******************************************************-->
+    <script type="text/javascript">
+    	show_vis_app();
+	    $(document).ready(function () {
+	        var frameable = false;
+	        if(frameable){
+	            $('fieldset:not(#core-dashboard)').hide();
+	            $('.nav').hide();
+	        }
+	    });
+
+	    function simulate_apps(a,b,c,d){
+	    	document.getElementById('content').style.display = a;
+	    	document.getElementById('data-app1').style.display = b;
+	    	document.getElementById('data-app2').style.display = c;
+	    	document.getElementById('notification-app').style.display = d;
+	    	
+	    }
+
+	    function show_vis_app(){
+	    	simulate_apps("inherit", "none", "none", "none")
+	    }
+
+	    function show_data_app_1(){
+	    	simulate_apps("none", "inherit", "none", "none")
+	    }
+
+	    function show_data_app_2(){
+	    	simulate_apps("none", "none", "inherit", "none")
+	    }
+
+	    function show_notifications_app(){
+	    	simulate_apps("none", "none", "none", "inherit")
+	    }
+
+
+    </script>
+
 </html>
