@@ -2,10 +2,10 @@ FROM node:boron
 
 WORKDIR /opt/app
 
-ADD package.json /tmp/package.json
+COPY package.json /tmp/package.json
 RUN apt-get update && cd /tmp && npm install
 RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
-ADD ./ /opt/app/
+COPY ./ /opt/app/
 
 EXPOSE 3000
 
