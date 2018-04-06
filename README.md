@@ -4,6 +4,9 @@
 
 Visualize data from an AOI process
 
+## Configuration:
+ Bevore first start the ip adress of the etcd store needs to be configured in dashboard/wwwroot/js/private/etcdlogic.js
+
 ## Archetype Usage
 
 App uses archetype XX with origin XXX

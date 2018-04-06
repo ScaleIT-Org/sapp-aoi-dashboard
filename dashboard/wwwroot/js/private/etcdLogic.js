@@ -1,7 +1,7 @@
 //Gets etcd information
 var xhr = new XMLHttpRequest();
-xhr.open('GET', "http://192.168.0.29:2379/v2/keys?recursive=true", true); xhr.send(); 
-setInterval(function(){ xhr.open('GET', "http://192.168.0.29:2379/v2/keys?recursive=true", true); xhr.send(); }, 3000);
+xhr.open('GET', "http://localhost:2379/v2/keys?recursive=true", true); xhr.send(); 
+setInterval(function(){ xhr.open('GET', "http://localhost:2379/v2/keys?recursive=true", true); xhr.send(); }, 3000);
 xhr.onreadystatechange = processRequest;
 
 //Adds Sidebar Elements

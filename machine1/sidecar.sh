@@ -6,7 +6,7 @@ echo "pid is $$"
 #check if etcd is up and running
 STR='"health": "false"'
 STR=$(curl -sb -H "Accept: application/json" "http://etcd:2379/health")
-while [[ $STR != *'"health": "true"'* ]]
+while [[ $STR != *'"health":"true"'* ]]
 do
 	echo "Waiting for etcd ..."
 	STR=$(curl -sb -H "Accept: application/json" "http://etcd:2379/health")
@@ -14,8 +14,8 @@ do
 done
 
 #Register Application
-curl -L -X PUT http://192.168.0.29:2379/v2/keys/M1/url -d value="localhost:3001"
-curl -L -X PUT http://192.168.0.29:2379/v2/keys/M1/icon -d value="/icon/favicon.png"
+curl -L -X PUT http://etcd:2379/v2/keys/M1/url -d value="localhost:3001"
+curl -L -X PUT http://etcd:2379/v2/keys/M1/icon -d value="/icon/favicon.png"
 
 
 # SIGTERM-handler
