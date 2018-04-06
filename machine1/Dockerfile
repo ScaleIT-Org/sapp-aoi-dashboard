@@ -1,10 +1,12 @@
-FROM node:boron
+FROM node:boron-alpine
 
 WORKDIR /opt/app
 
 COPY package.json /tmp/package.json
-RUN apt-get update &&  cd /tmp && npm install
+RUN apk update &&  cd /tmp && npm install
 RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
+RUN apk add --update bash && rm -rf /var/cache/apk/*
+RUN apk add --no-cache curl
 COPY ./ /opt/app/
 
 EXPOSE 3000
