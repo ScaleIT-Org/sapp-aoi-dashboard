@@ -1,0 +1,20 @@
+---
+version: '2'
+services:
+   etcdbrowser:
+     image: woosley/etcd-browser
+     ports:
+       - "8080:8080"
+     volumes:
+       - ./config.yaml:/app/config.yaml
+     depends_on:
+       - etcd
+   etcd:
+     image: quay.io/coreos/etcd
+     command:
+        - /usr/local/bin/etcd
+        - "-advertise-client-urls=http://0.0.0.0:2379"
+        - "-listen-client-urls=http://0.0.0.0:2379"
+        - "-cors=*"
+     ports:
+        - "2379:2379"
