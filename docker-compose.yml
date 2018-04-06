@@ -15,7 +15,7 @@ services:
   etcdbrowser:
     image: woosley/etcd-browser
     ports:
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       - ./Domain Software/etcd-browser/config.yaml:/app/config.yaml
   etcd:

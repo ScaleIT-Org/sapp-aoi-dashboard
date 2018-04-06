@@ -12,10 +12,6 @@ var SSE = require('sse');
 var url = require("url");
 var fs = require('fs');
 //var WebSocketServer = require('websocket').server;
-var graphqlHTTP = require('express-graphql');
-var buildSchema  = require('graphql');
-var jsonToGraphql = require("json-to-graphql");
-var jsonldVis = require('./wwwroot/js/jsonld-vis')
 
 var root = './wwwroot/js';
 var netjet = require('netjet');  
