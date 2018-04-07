@@ -1,23 +1,29 @@
-version: '2'
+version: '3'
 services:
   dashboard:
-#    build: ./Domain Software/dashboard/
+    build: ./dashboard/
     ports:
       - "3000:3000"
   m1:
-#    build: ./Domain Software/machine1/
+    build: ./machine1/
     ports:
       - "3001:3000"
+    depends_on:
+      - etcd
   m2:
-#    build: ./Domain Software/machine2/
+    build: ./machine2/
     ports:
       - "3002:3000"
+    depends_on:
+      - etcd
   etcdbrowser:
     image: woosley/etcd-browser
     ports:
-      - "8081:8080"
-#    volumes:
-#      - ./Domain Software/etcd-browser/config.yaml:/app/config.yaml
+      - "8080:8080"
+    volumes:
+      - ./etcd-browser/config.yaml:/app/config.yaml
+    depends_on:
+      - etcd
   etcd:
     image: quay.io/coreos/etcd
     command:
@@ -26,8 +32,6 @@ services:
       - "-listen-client-urls=http://0.0.0.0:2379"
     ports:
       - "2379:2379"
-    environment:
-      - ETCD_CORS=*
   portainer:
     image: portainer/portainer
     ports:
@@ -41,3 +45,12 @@ services:
       - VIRTUAL_PORT
       - LETSENCRYPT_HOST=${VIRTUAL_HOST}
       - LETSENCRYPT_EMAIL
+  sut:
+    build: 
+      context: ./CI_Tests
+      dockerfile: Dockerfile.test
+    links:
+      - dashboard
+    depends_on:
+      - dashboard
+
