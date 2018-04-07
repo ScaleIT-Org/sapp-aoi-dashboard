@@ -1,15 +1,15 @@
 version: '2'
 services:
   dashboard:
-#    build: ./Domain Software/dashboard/
+    build: ./Domain Software/dashboard/
     ports:
       - "3000:3000"
   m1:
-#    build: ./Domain Software/machine1/
+    build: ./Domain Software/machine1/
     ports:
       - "3001:3000"
   m2:
-#    build: ./Domain Software/machine2/
+    build: ./Domain Software/machine2/
     ports:
       - "3002:3000"
   etcdbrowser:
