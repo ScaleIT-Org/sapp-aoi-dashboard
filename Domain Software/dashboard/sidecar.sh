@@ -6,7 +6,7 @@ echo "pid is $$"
 #check if etcd is up and running
 STR='"health": "false"'
 STR=$(curl -sb -H "Accept: application/json" "http://etcd:2379/health")
-while [ $STR != *'"health": "true"'* ] || [ $STR != *'"health":"true"'* ] 
+while [[ $STR != *'"health": "true"'* &&  $STR != *'"health":"true"'* ]] 
 do
         echo "Waiting for etcd ..."
         STR=$(curl -sb -H "Accept: application/json" "http://etcd:2379/health")
