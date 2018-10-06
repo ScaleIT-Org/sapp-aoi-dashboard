@@ -74,25 +74,26 @@ app.get('/notification', function (req, res)
 
 //Read JSONLD file
 var testJsonPath = path.join(__dirname,'../data/aoiTestStep201677183729977.json');
-
 var jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
-
 
 app.get('/Get', function (req, res) {
 	//answer with Json object
+  jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
 	res.jsonp(jsonld);
 });
 
 
 var testMarkdownPath = path.join(__dirname,'../README.md');
-var readme = fs.readFileSync(testMarkdownPath, 'utf8');
+var readme = fs.readFileSync(testMarkdownPath, 'utf8')
 
 app.get('/md', function (req, res) {
   //answer with Markdown object
+  readme = fs.readFileSync(testMarkdownPath, 'utf8');
   res.send(readme);
 });
 
 app.get('/sse', function (req, res) {
+  jsonld = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
   var parsedURL = url.parse(req.url, true);
   var pathname = parsedURL.pathname + "/data";
 
@@ -140,8 +141,9 @@ io.on('connection', function(socket){
 	setInterval(function() { 
 		if(JSON.stringify(data) == JSON.stringify(JSON.parse(fs.readFileSync(testJsonPath, 'utf8')))) {
 			data = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
-		} {
+		} else {
 			data = JSON.parse(fs.readFileSync(testJsonPath, 'utf8'));
+      console.log("emitting new data")
 			io.emit('json', data);
 		}
 	}, 5000);

@@ -1,5 +1,5 @@
 //************************************************************************* Globale Variablen
-	var ajaxUrl = "http://localhost:3000/Get/";
+	var ajaxUrl = "http://localhost:49550/Get/";
 	var jsonObject;
   var sidata;
 	var init = true;
@@ -190,7 +190,6 @@ function doAjax() {
               updateChartData();
               //Crawl and show Metadata
               initDropdowns();
-              initDashboard();
 
         }
   });

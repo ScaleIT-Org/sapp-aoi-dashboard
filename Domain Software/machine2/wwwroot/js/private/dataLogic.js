@@ -35,7 +35,7 @@ $(document).ready(function () {
 
     
   //*********************************************************************** Server Sent Events Listeners
-  var es = new EventSource("http://localhost:3002/sse/");
+  var es = new EventSource("http://localhost:49552/sse/");
   startSSEListeners();
   function startSSEListeners() {
     es.addEventListener("open",  function(event){

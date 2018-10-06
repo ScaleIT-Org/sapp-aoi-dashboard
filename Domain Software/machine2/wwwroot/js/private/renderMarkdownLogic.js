@@ -1,4 +1,4 @@
-var body_location = "http://localhost:3002/md/";
+var body_location = "http://localhost:49552/md/";
 //read the markdown file
 $(document).ready(function () {
 		// get markdown content  

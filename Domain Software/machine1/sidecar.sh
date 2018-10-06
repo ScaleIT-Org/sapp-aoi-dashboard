@@ -15,7 +15,7 @@ do
 done
 
 #Register Application
-curl -L -X PUT http://etcd:2379/v2/keys/M1/url -d value="localhost:3001"
+curl -L -X PUT http://etcd:2379/v2/keys/M1/url -d value="localhost:49551"
 curl -L -X PUT http://etcd:2379/v2/keys/M1/icon -d value="/icon/favicon.png"
 
 

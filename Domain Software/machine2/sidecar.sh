@@ -15,7 +15,7 @@ done
 
 
 #set -x
-curl -L -X PUT http://etcd:2379/v2/keys/M2/url -d value="localhost:3002"
+curl -L -X PUT http://etcd:2379/v2/keys/M2/url -d value="localhost:49552"
 curl -L -X PUT http://etcd:2379/v2/keys/M2/icon -d value="/icon/favicon.png"
 
 
